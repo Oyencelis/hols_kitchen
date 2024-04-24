@@ -15,10 +15,10 @@ public class Itec103_design {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        LoginAndSignUp LoginAndSignUpFrame = new LoginAndSignUp();
-        LoginAndSignUpFrame.setVisible(true);
-        LoginAndSignUpFrame.pack();
-        LoginAndSignUpFrame.setLocationRelativeTo(null);
+        Login Login = new Login();
+        Login.setVisible(true);
+        Login.pack();
+        Login.setLocationRelativeTo(null);
         
     }
     

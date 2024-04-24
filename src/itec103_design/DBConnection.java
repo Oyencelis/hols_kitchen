@@ -18,7 +18,7 @@ public class DBConnection {
         
         String Surl, SUser,Spass;
    
-        Surl = "jdbc:MySQL://localhost:3306/signup";
+        Surl = "jdbc:MySQL://localhost:3306/hols_kitchen";
         SUser = "root";
         Spass = "";
         Connection con = null;

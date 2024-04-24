@@ -9,20 +9,32 @@ package itec103_design;
  * @author celis
  */
 public class User {
-    private String fullname;
+    private String firstname;    
+    private String lastname;
     private String email;
+    private String role;
 
-    public User(String username, String email) {
-        this.fullname = username;
+    public User(String firstname, String lastname, String email, String role) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
+        this.role = role;
     }
 
-    public String getUsername() {
-        return fullname;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setUsername(String username) {
-        this.fullname = username;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+    
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
     public String getEmail() {
@@ -31,6 +43,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     // You might also include other user-related properties and methods
