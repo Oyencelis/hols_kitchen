@@ -25,7 +25,6 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(Surl, SUser, Spass);
-            //test comment
         } catch(Exception e) {
                JOptionPane.showMessageDialog(null, e);
         }
