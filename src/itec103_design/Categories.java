@@ -4,22 +4,25 @@
  */
 package itec103_design;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import javax.swing.border.MatteBorder;
 
 /**
  *
  * @author Janice
  */
-public class Dash extends javax.swing.JFrame {
+public class Categories extends javax.swing.JFrame {
 
     /**
      * Creates new form JFrame4
      */
-    public Dash() {
+    public Categories() {
         initComponents();
         setUser();
         
         this.setLocationRelativeTo(null);
+        newCategory.setBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK));
     }
     
     public void setUser(){
@@ -48,15 +51,17 @@ public class Dash extends javax.swing.JFrame {
         dashboard = new javax.swing.JButton();
         categories = new javax.swing.JButton();
         products = new javax.swing.JButton();
+        purchased = new javax.swing.JButton();
         usersLink = new javax.swing.JButton();
-        purchased1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         user = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
+        newCategory = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(237, 121, 13));
@@ -89,7 +94,7 @@ public class Dash extends javax.swing.JFrame {
         });
         jPanel2.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 180, 40));
 
-        dashboard.setBackground(new java.awt.Color(237, 121, 13));
+        dashboard.setBackground(new java.awt.Color(242, 242, 242));
         dashboard.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         dashboard.setIcon(new javax.swing.ImageIcon(getClass().getResource("/dashboard.png"))); // NOI18N
         dashboard.setText("Dashboard");
@@ -107,7 +112,7 @@ public class Dash extends javax.swing.JFrame {
         });
         jPanel2.add(dashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 180, 40));
 
-        categories.setBackground(new java.awt.Color(242, 242, 242));
+        categories.setBackground(new java.awt.Color(237, 121, 13));
         categories.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         categories.setIcon(new javax.swing.ImageIcon(getClass().getResource("/categories.png"))); // NOI18N
         categories.setText("Categories");
@@ -144,6 +149,24 @@ public class Dash extends javax.swing.JFrame {
         });
         jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
+        purchased.setBackground(new java.awt.Color(242, 242, 242));
+        purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        purchased.setIcon(new javax.swing.ImageIcon(getClass().getResource("/purchased.png"))); // NOI18N
+        purchased.setText("Purchased");
+        purchased.setBorderPainted(false);
+        purchased.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        purchased.setDisabledIcon(null);
+        purchased.setFocusPainted(false);
+        purchased.setFocusable(false);
+        purchased.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        purchased.setIconTextGap(10);
+        purchased.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                purchasedActionPerformed(evt);
+            }
+        });
+        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+
         usersLink.setBackground(new java.awt.Color(242, 242, 242));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         usersLink.setIcon(new javax.swing.ImageIcon(getClass().getResource("/users.png"))); // NOI18N
@@ -160,24 +183,6 @@ public class Dash extends javax.swing.JFrame {
             }
         });
         jPanel2.add(usersLink, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, 180, 40));
-
-        purchased1.setBackground(new java.awt.Color(242, 242, 242));
-        purchased1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        purchased1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/purchased.png"))); // NOI18N
-        purchased1.setText("Purchased");
-        purchased1.setBorderPainted(false);
-        purchased1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        purchased1.setDisabledIcon(null);
-        purchased1.setFocusPainted(false);
-        purchased1.setFocusable(false);
-        purchased1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        purchased1.setIconTextGap(10);
-        purchased1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                purchased1ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(purchased1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         jPanel1.setToolTipText("");
@@ -198,8 +203,12 @@ public class Dash extends javax.swing.JFrame {
         jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel3.setText("Dashboard");
+        jLabel3.setText("Categories");
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 130, 40));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel4.setText("Categories");
+        jPanel3.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 130, 40));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setFocusable(false);
@@ -209,14 +218,19 @@ public class Dash extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGap(0, 340, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
+            .addGap(0, 460, Short.MAX_VALUE)
         );
 
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 200, 200));
+        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 340, 460));
+
+        newCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        newCategory.setText("Add New Category");
+        newCategory.setFocusTraversalPolicyProvider(true);
+        jPanel4.add(newCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 330, 40));
 
         jScrollPane1.setViewportView(jPanel4);
 
@@ -264,16 +278,15 @@ public class Dash extends javax.swing.JFrame {
 
     private void dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_dashboardActionPerformed
-
-    private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
-        // TODO add your handling code here:
-        Categories Frame = new Categories();
+        Dash Frame = new Dash();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
-        this.dispose();         // TODO add your handling code here:
+        this.dispose(); 
+    }//GEN-LAST:event_dashboardActionPerformed
+
+    private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
+                 // TODO add your handling code here:
     }//GEN-LAST:event_categoriesActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
@@ -285,19 +298,23 @@ public class Dash extends javax.swing.JFrame {
         this.dispose();   
     }//GEN-LAST:event_productsActionPerformed
 
-    private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_usersLinkActionPerformed
-
-    private void purchased1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchased1ActionPerformed
+    private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
         // TODO add your handling code here:
         Purchased Frame = new Purchased();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
         this.dispose(); 
-    }//GEN-LAST:event_purchased1ActionPerformed
+    }//GEN-LAST:event_purchasedActionPerformed
+
+    private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
+        // TODO add your handling code here:
+        Purchased Frame = new Purchased();
+        Frame.setVisible(true);
+        Frame.pack();
+        Frame.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_usersLinkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,6 +365,7 @@ public class Dash extends javax.swing.JFrame {
     javax.swing.JButton dashboard;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel3;
+    javax.swing.JLabel jLabel4;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
@@ -355,8 +373,9 @@ public class Dash extends javax.swing.JFrame {
     javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JButton logout;
+    javax.swing.JLabel newCategory;
     javax.swing.JButton products;
-    javax.swing.JButton purchased1;
+    javax.swing.JButton purchased;
     javax.swing.JLabel user;
     javax.swing.JButton usersLink;
     // End of variables declaration//GEN-END:variables
