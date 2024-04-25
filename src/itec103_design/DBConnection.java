@@ -17,8 +17,8 @@ public class DBConnection {
     public static Connection connect() {
         
         String Surl, SUser,Spass;
-   
-        Surl = "jdbc:MySQL://localhost:3306/hols_kitchen";
+         // please change the port number depending on the port of running on your local ..
+        Surl = "jdbc:MySQL://localhost:3308/hols_kitchen";
         SUser = "root";
         Spass = "";
         Connection con = null;
