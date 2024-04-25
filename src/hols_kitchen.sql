@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2024 at 08:33 PM
+-- Generation Time: Apr 25, 2024 at 07:26 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -60,7 +60,8 @@ CREATE TABLE `purchased` (
   `product_id` int(10) NOT NULL,
   `created_at` timestamp NULL DEFAULT current_timestamp(),
   `updated_at` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `status` int(2) DEFAULT 0
+  `status` int(2) DEFAULT 0,
+  `user_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -87,7 +88,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `firstname`, `lastname`, `email`, `password`, `created_at`, `updated_at`, `role`, `status`) VALUES
 (1, 'Inan', 'Celis', 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', '2024-04-24 17:21:11', '2024-04-24 21:32:09', 1, 0),
-(2, 'Oyen', 'Celis', 'oyencelis@gmail.com', 'd6af934fc1f0c5d701023205b7dc326cea2dd609', '2024-04-24 17:14:32', '2024-04-25 01:14:32', 0, 0);
+(2, 'Oyen', 'Celis', 'oyencelis@gmail.com', 'd6af934fc1f0c5d701023205b7dc326cea2dd609', '2024-04-24 17:14:32', '2024-04-25 01:14:32', 0, 0),
+(3, 'angelica', 'cuevas', 'angie', 'affd33dec31b0844c378d4ba0506c22f4c3f1ce9', '2024-04-25 02:01:14', '2024-04-25 10:01:14', 0, 0),
+(4, 'leri', 'leri', 'leri', '23ed5a31705e5fd974ebfee771a4f2bd72dc8c75', '2024-04-25 02:01:53', '2024-04-25 10:01:53', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -143,7 +146,7 @@ ALTER TABLE `purchased`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
