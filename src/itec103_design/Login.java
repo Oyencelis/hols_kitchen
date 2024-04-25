@@ -4,6 +4,7 @@
  */
 package itec103_design;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.MessageDigest;
@@ -25,8 +26,11 @@ public class Login extends javax.swing.JFrame {
      * Creates new form JFrame2
      */
     Connection con = null;
+    HelperClass hp = null;
     public Login() {
         initComponents();
+ 
+        hp = new HelperClass();
         con = DBConnection.connect();
         signuplabel.addMouseListener(new MouseAdapter()  
         {  
@@ -38,7 +42,8 @@ public class Login extends javax.swing.JFrame {
                 SignUpFrame.setLocationRelativeTo(null);
                 dispose();
             }  
-        }); 
+        });
+        
     }
 
     /**
@@ -145,6 +150,11 @@ public class Login extends javax.swing.JFrame {
                 emailActionPerformed(evt);
             }
         });
+        email.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                emailKeyPressed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(0, 0, 0));
         jButton2.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -171,6 +181,11 @@ public class Login extends javax.swing.JFrame {
         password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordActionPerformed(evt);
+            }
+        });
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
             }
         });
 
@@ -246,9 +261,9 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_emailActionPerformed
     
-
-    private void logInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInBtn
+    public void formValidation(){
         String 
+                user_id = null,
                 Email, 
                 Password, 
                 query, 
@@ -262,42 +277,42 @@ public class Login extends javax.swing.JFrame {
         int notFound = 0;
         try {
             Statement st = con.createStatement();
-            if(email.getText().isBlank()){
-                JOptionPane.showMessageDialog(new JFrame(), "Email is required", "Error", JOptionPane.ERROR_MESSAGE);
-                if(!email.getText().contains("@")){
-                     JOptionPane.showMessageDialog(new JFrame(), "@ is required", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+            if(email.getText().isBlank() && password.getText().isBlank()){
+                hp.errorMessageDialog("All field are required");
+            }else if(email.getText().isBlank()){
+                hp.errorMessageDialog("Please Enter Email");
             }else if(password.getText().isBlank()){
-                JOptionPane.showMessageDialog(new JFrame(), "Password is required", "Error", JOptionPane.ERROR_MESSAGE);
+                hp.errorMessageDialog("Please Enter Password");
             }else {
                 Email = email.getText();
                 Password = passwordHash(password.getText());
-    //            String hashedPassword = hashPassword(Password);
+                //String hashedPassword = hashPassword(Password);
 
                 query = "SELECT * FROM users WHERE email= '"+Email+"'";
                 ResultSet rs = st.executeQuery(query);
                 while(rs.next()){
-                passDb = rs.getString("password");
-                firstname = rs.getString("firstname");
-                lastname = rs.getString("lastname");
-                role = rs.getString("role");
-                notFound = 1;
-                System.out.println("Original Password: " + Password);
-                System.out.println("Hashed Password: " + passDb);
+                    passDb = rs.getString("password");
+                    user_id = rs.getString("user_id");
+                    firstname = rs.getString("firstname");
+                    lastname = rs.getString("lastname");
+                    role = rs.getString("role");
+                    notFound = 1;
+                    System.out.println("Original Password: " + Password);
+                    System.out.println("Hashed Password: " + passDb);
 
-            }
+                }
                 if(notFound == 1 && Password.equals(passDb)){
-                    User currentUser = new User(firstname,lastname, Email, role);
+                    User currentUser = new User(user_id, firstname,lastname, Email, role);
                     UserManager.setCurrentUser(currentUser);
-//                    System.out.println("User: " + currentUser.getUsername());
+                    //System.out.println("User: " + currentUser.getUsername());
                     Dash DashFrame = new Dash();
-//                    DashFrame.setUser(currentUser.getUsername());
+                    //DashFrame.setUser(currentUser.getUsername());
                     DashFrame.setVisible(true);
                     DashFrame.pack();
                     DashFrame.setLocationRelativeTo(null);
                     this.dispose();
                 }else{
-                    JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error", JOptionPane.ERROR_MESSAGE);
+                    hp.errorMessageDialog("Incorrect Email or Password");
                 }
 
                 password.setText("");
@@ -306,16 +321,38 @@ public class Login extends javax.swing.JFrame {
         }catch(Exception e){
             System.out.println("Error!" + e.getMessage());
         }
+    
+    }
+    
+
+    private void logInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInBtn
+        formValidation();
     }//GEN-LAST:event_logInBtn
     
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_passwordActionPerformed
 
     private void jButton2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton2KeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2KeyPressed
 
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        // TODO add your handling code here:
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_passwordKeyPressed
+
+    private void emailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailKeyPressed
+        // TODO add your handling code here:
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_emailKeyPressed
+
+    public void formValidationWithEnter(java.awt.event.KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            formValidation();
+        }
+    }
     
     public static String passwordHash(String password) {
         try {

@@ -4,6 +4,9 @@
  */
 package itec103_design;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,10 +18,11 @@ public class Dash extends javax.swing.JFrame {
     /**
      * Creates new form JFrame4
      */
+    HelperClass hp = null;
     public Dash() {
         initComponents();
         setUser();
-        
+        hp = new HelperClass();
         this.setLocationRelativeTo(null);
     }
     
@@ -164,7 +168,7 @@ public class Dash extends javax.swing.JFrame {
         purchased1.setBackground(new java.awt.Color(242, 242, 242));
         purchased1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         purchased1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/purchased.png"))); // NOI18N
-        purchased1.setText("Purchased");
+        purchased1.setText("Orders");
         purchased1.setBorderPainted(false);
         purchased1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         purchased1.setDisabledIcon(null);
@@ -249,8 +253,7 @@ public class Dash extends javax.swing.JFrame {
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
         
-        int input = JOptionPane.showConfirmDialog(null, 
-                "Are you sure do you want to logut?", "Select an Option...",JOptionPane.YES_NO_OPTION);
+        int input = hp.confirmDialog("Confirm Log Out?");
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
             Login LoginFrame = new Login();
@@ -268,12 +271,16 @@ public class Dash extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardActionPerformed
 
     private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
-        // TODO add your handling code here:
-        Categories Frame = new Categories();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();         // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            Categories Frame = new Categories();
+            Frame.setVisible(true);
+            Frame.pack();
+            Frame.setLocationRelativeTo(null);
+            this.dispose();         // TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(Dash.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_categoriesActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
@@ -292,7 +299,7 @@ public class Dash extends javax.swing.JFrame {
 
     private void purchased1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchased1ActionPerformed
         // TODO add your handling code here:
-        Purchased Frame = new Purchased();
+        Orders Frame = new Orders();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);

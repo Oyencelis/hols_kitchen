@@ -4,6 +4,9 @@
  */
 package itec103_design;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,10 +18,12 @@ public class Products extends javax.swing.JFrame {
     /**
      * Creates new form JFrame4
      */
+        HelperClass hp = null;
+
     public Products() {
         initComponents();
         setUser();
-        
+        hp = new HelperClass();
         this.setLocationRelativeTo(null);
     }
     
@@ -56,7 +61,7 @@ public class Products extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(237, 121, 13));
@@ -147,7 +152,7 @@ public class Products extends javax.swing.JFrame {
         purchased.setBackground(new java.awt.Color(242, 242, 242));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         purchased.setIcon(new javax.swing.ImageIcon(getClass().getResource("/purchased.png"))); // NOI18N
-        purchased.setText("Purchased");
+        purchased.setText("Orders");
         purchased.setBorderPainted(false);
         purchased.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         purchased.setDisabledIcon(null);
@@ -204,19 +209,7 @@ public class Products extends javax.swing.JFrame {
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setFocusable(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 200, Short.MAX_VALUE)
-        );
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 200, 200));
+        jPanel4.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 390, 280));
 
         jScrollPane1.setViewportView(jPanel4);
 
@@ -249,8 +242,8 @@ public class Products extends javax.swing.JFrame {
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
         
-        int input = JOptionPane.showConfirmDialog(null, 
-                "Are you sure do you want to logut?", "Select an Option...",JOptionPane.YES_NO_OPTION);
+        int input = hp.confirmDialog("Confirm Log Out?");
+
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
             Login LoginFrame = new Login();
@@ -272,12 +265,16 @@ public class Products extends javax.swing.JFrame {
     }//GEN-LAST:event_dashboardActionPerformed
 
     private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
-        // TODO add your handling code here:
-        Categories Frame = new Categories();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();         // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            Categories Frame = new Categories();
+            Frame.setVisible(true);
+            Frame.pack();
+            Frame.setLocationRelativeTo(null);
+            this.dispose();         // TODO add your handling code here:
+        } catch (SQLException ex) {
+            Logger.getLogger(Products.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_categoriesActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
@@ -287,7 +284,7 @@ public class Products extends javax.swing.JFrame {
 
     private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
         // TODO add your handling code here:
-        Purchased Frame = new Purchased();
+        Orders Frame = new Orders();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
@@ -296,7 +293,7 @@ public class Products extends javax.swing.JFrame {
 
     private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
         // TODO add your handling code here:
-        Purchased Frame = new Purchased();
+        Orders Frame = new Orders();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
@@ -356,8 +353,8 @@ public class Products extends javax.swing.JFrame {
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
-    javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JTabbedPane jTabbedPane1;
     javax.swing.JButton logout;
     javax.swing.JButton products;
     javax.swing.JButton purchased;

@@ -4,6 +4,7 @@
  */
 package itec103_design;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.MessageDigest;
@@ -25,10 +26,11 @@ public class SignUp extends javax.swing.JFrame {
      * Creates new form JFrame3
      */
     Connection con = null;
+    HelperClass hp = null;
     public SignUp() {
         initComponents();
         con = DBConnection.connect();
-        
+                hp = new HelperClass();
         loginlabel.addMouseListener(new MouseAdapter()  
         {  
             public void mouseClicked(MouseEvent e)  
@@ -72,11 +74,14 @@ public class SignUp extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(542, 333));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(153, 0, 0));
 
@@ -121,31 +126,23 @@ public class SignUp extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/itec103_design/hols_logo.png"))); // NOI18N
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(225, 0, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(29, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/itec103_design/hols_logo.png"))); // NOI18N
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(29, 95, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         fname.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         fname.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         fname.setToolTipText("");
         fname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        fname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                fnameKeyPressed(evt);
+            }
+        });
+        jPanel1.add(fname, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 66, 210, -1));
 
         email.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         email.setHorizontalAlignment(javax.swing.JTextField.LEFT);
@@ -156,6 +153,12 @@ public class SignUp extends javax.swing.JFrame {
                 emailActionPerformed(evt);
             }
         });
+        email.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                emailKeyPressed(evt);
+            }
+        });
+        jPanel1.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 170, 210, -1));
 
         SignUpBtn.setBackground(new java.awt.Color(0, 0, 0));
         SignUpBtn.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
@@ -166,101 +169,52 @@ public class SignUp extends javax.swing.JFrame {
                 SignUpBtnActionPerformed(evt);
             }
         });
+        jPanel1.add(SignUpBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 261, 210, -1));
 
         password.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
+            }
+        });
+        jPanel1.add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 222, 210, 21));
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel2.setText("Last Name");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 96, 140, -1));
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel4.setText("Email");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 145, 140, -1));
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel5.setText("Password");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 197, 140, -1));
 
         jLabel6.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel6.setText("First Name");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 41, 140, -1));
 
         lname.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         lname.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         lname.setToolTipText("");
         lname.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lnameKeyPressed(evt);
+            }
+        });
+        jPanel1.add(lname, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 121, 210, -1));
 
         jLabel1.setText("Already have an Account ?");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 304, 150, -1));
 
         loginlabel.setForeground(new java.awt.Color(51, 102, 255));
         loginlabel.setText("Login here");
         loginlabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel1.add(loginlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(479, 304, 73, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(email)
-                        .addComponent(fname)
-                        .addComponent(password)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(SignUpBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loginlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(53, 53, 53))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(3, 3, 3)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(SignUpBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(loginlabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 605, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 605, 379));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -271,39 +225,68 @@ public class SignUp extends javax.swing.JFrame {
     
     
     private void SignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpBtnActionPerformed
-        String firstname, lastname, useEmail, usePass , query;
-        try {
-            Statement st = con.createStatement();
-            if(fname.getText().isBlank()){
-                JOptionPane.showMessageDialog(new JFrame(), "Firstname is required", "Error", JOptionPane.ERROR_MESSAGE);
-            }else if(lname.getText().isBlank()) {
-                JOptionPane.showMessageDialog(new JFrame(), "Lastname is required", "Error", JOptionPane.ERROR_MESSAGE);
-            }else if(email.getText().isBlank()){
-                JOptionPane.showMessageDialog(new JFrame(), "Email is required", "Error", JOptionPane.ERROR_MESSAGE);
-            }else if(password.getText().isBlank()){
-                JOptionPane.showMessageDialog(new JFrame(), "Password is required", "Error", JOptionPane.ERROR_MESSAGE);
-            }else {
-                firstname = fname.getText();
-                lastname = lname.getText();                
-                useEmail = email.getText();
-                usePass = passwordHash(password.getText());
-                System.out.println(password);
-
-                query = "INSERT INTO users(firstname, lastname, email, password)" +
-                        "VALUES('"+firstname+"','"+lastname+"', '"+useEmail+"', '"+usePass+"')";
-
-                st.execute(query);
-                fname.setText("");
-                lname.setText("");
-                email.setText("");
-                password.setText("");
-                showMessageDialog(null, "New Account has been Created Successfully!!");
-                
-            }
-        }catch(Exception e){
-            System.out.println("Error!" + e.getMessage());
-        }
+        formValidaton();
     }//GEN-LAST:event_SignUpBtnActionPerformed
+
+    public void formValidaton() {
+            try {
+                String firstname, lastname, useEmail, usePass , query;
+                Statement st = con.createStatement();
+                if(fname.getText().isBlank() && lname.getText().isBlank() && email.getText().isBlank() && password.getText().isBlank()){
+                    hp.errorMessageDialog("All field are required");
+                }else if(fname.getText().isBlank()){
+                    hp.errorMessageDialog("Firstname is required");
+                }else if(lname.getText().isBlank()) {
+                    hp.errorMessageDialog("Lastname is required");
+                }else if(email.getText().isBlank()){
+                    hp.errorMessageDialog("Email is required");
+                }else if(password.getText().isBlank()){
+                    hp.errorMessageDialog("Password is required");
+                }else {
+                    firstname = fname.getText();
+                    lastname = lname.getText();                
+                    useEmail = email.getText();
+                    usePass = passwordHash(password.getText());
+                    System.out.println(password);
+
+                    query = "INSERT INTO users(firstname, lastname, email, password)" +
+                            "VALUES('"+firstname+"','"+lastname+"', '"+useEmail+"', '"+usePass+"')";
+
+                    st.execute(query);
+                    fname.setText("");
+                    lname.setText("");
+                    email.setText("");
+                    password.setText("");
+                    hp.messageDialog("New Account has been created");
+
+
+                }
+            }catch(Exception e){
+                System.out.println("Error!" + e.getMessage());
+            }
+    }
+    
+    public void formValidationWithEnter(java.awt.event.KeyEvent evt) {
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            formValidaton();
+        }
+    }
+    private void fnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fnameKeyPressed
+        // TODO add your handling code here:
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_fnameKeyPressed
+
+    private void lnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lnameKeyPressed
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_lnameKeyPressed
+
+    private void emailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_emailKeyPressed
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_emailKeyPressed
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        formValidationWithEnter(evt);
+    }//GEN-LAST:event_passwordKeyPressed
 
     
     public static String passwordHash(String password) {

@@ -5,7 +5,13 @@
 package itec103_design;
 
 import java.awt.Color;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.border.MatteBorder;
 
 /**
@@ -17,14 +23,31 @@ public class Categories extends javax.swing.JFrame {
     /**
      * Creates new form JFrame4
      */
-    public Categories() {
+    Connection con = null;
+    HelperClass hp = null;
+    public Categories() throws SQLException {
         initComponents();
         setUser();
+        con = DBConnection.connect();
         
         this.setLocationRelativeTo(null);
-        newCategory.setBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK));
+        newCategory.setBorder(new MatteBorder(0, 0, 2, 0, Color.ORANGE));
+        getCategories();
+        hp = new HelperClass();
+        
     }
     
+    
+    public void getCategories() throws SQLException {
+        Statement st = con.createStatement();
+        String query = "SELECT * FROM categories WHERE status= '0' ORDER BY category_name ASC";
+        ResultSet rs = st.executeQuery(query);
+        categorylist.removeAll(); 
+        while(rs.next()){
+            String cat = rs.getString("category_name");
+            categorylist.add(cat); 
+        }
+    }
     public void setUser(){
         User currentUser = UserManager.getCurrentUser();
         System.out.println("User: " + currentUser.getFirstname());
@@ -60,8 +83,13 @@ public class Categories extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
-        jPanel5 = new javax.swing.JPanel();
         newCategory = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        category_name = new javax.swing.JTextField();
+        addCategoryBtn = new javax.swing.JButton();
+        categorylist = new java.awt.List();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(237, 121, 13));
@@ -152,7 +180,7 @@ public class Categories extends javax.swing.JFrame {
         purchased.setBackground(new java.awt.Color(242, 242, 242));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         purchased.setIcon(new javax.swing.ImageIcon(getClass().getResource("/purchased.png"))); // NOI18N
-        purchased.setText("Purchased");
+        purchased.setText("Orders");
         purchased.setBorderPainted(false);
         purchased.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         purchased.setDisabledIcon(null);
@@ -214,23 +242,66 @@ public class Categories extends javax.swing.JFrame {
         jPanel4.setFocusable(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 340, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
-        );
-
-        jPanel4.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 340, 460));
-
-        newCategory.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        newCategory.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         newCategory.setText("Add New Category");
         newCategory.setFocusTraversalPolicyProvider(true);
-        jPanel4.add(newCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, 330, 40));
+        jPanel4.add(newCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 300, 40));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("All Categories");
+        jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 110, -1));
+
+        category_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        category_name.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        category_name.setToolTipText("");
+        category_name.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        category_name.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                category_nameActionPerformed(evt);
+            }
+        });
+        category_name.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                category_nameKeyPressed(evt);
+            }
+        });
+        jPanel4.add(category_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 300, 30));
+
+        addCategoryBtn.setBackground(new java.awt.Color(0, 0, 0));
+        addCategoryBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        addCategoryBtn.setForeground(new java.awt.Color(255, 255, 255));
+        addCategoryBtn.setText("Add");
+        addCategoryBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addCategoryBtnlogInBtn(evt);
+            }
+        });
+        addCategoryBtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                addCategoryBtnKeyPressed(evt);
+            }
+        });
+        jPanel4.add(addCategoryBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 150, 80, -1));
+
+        categorylist.setFont(new java.awt.Font("Segoe UI Light", 0, 14)); // NOI18N
+        categorylist.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                categorylistMouseClicked(evt);
+            }
+        });
+        categorylist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categorylistActionPerformed(evt);
+            }
+        });
+        jPanel4.add(categorylist, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 340));
+
+        jLabel5.setText("Double click the item to delete");
+        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 200, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Category Name");
+        jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 110, -1));
 
         jScrollPane1.setViewportView(jPanel4);
 
@@ -245,7 +316,7 @@ public class Categories extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,8 +334,7 @@ public class Categories extends javax.swing.JFrame {
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
         
-        int input = JOptionPane.showConfirmDialog(null, 
-                "Are you sure do you want to logut?", "Select an Option...",JOptionPane.YES_NO_OPTION);
+        int input = hp.confirmDialog("Confirm Log Out?");
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
             Login LoginFrame = new Login();
@@ -300,7 +370,7 @@ public class Categories extends javax.swing.JFrame {
 
     private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
         // TODO add your handling code here:
-        Purchased Frame = new Purchased();
+        Orders Frame = new Orders();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
@@ -309,12 +379,83 @@ public class Categories extends javax.swing.JFrame {
 
     private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
         // TODO add your handling code here:
-        Purchased Frame = new Purchased();
+        Orders Frame = new Orders();
         Frame.setVisible(true);
         Frame.pack();
         Frame.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_usersLinkActionPerformed
+
+    private void category_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_category_nameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_category_nameActionPerformed
+
+    private void category_nameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_category_nameKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_category_nameKeyPressed
+
+    private void addCategoryBtnlogInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryBtnlogInBtn
+        String category = category_name.getText();
+        if(category_name.getText().isBlank()){
+            hp.errorMessageDialog("Please enter category");
+        } else {
+            try {
+                Statement st = con.createStatement();
+                String selectquery = "SELECT * FROM categories WHERE category_name= '"+category+"' AND status = 0";
+                ResultSet rs = st.executeQuery(selectquery);
+                if(rs.next()){
+                    hp.errorMessageDialog("Category name already exist!");
+                } else {
+                    String query = "INSERT INTO categories(category_name)" +
+                                "VALUES('"+category+"')";
+                    st.execute(query);
+                    getCategories();
+                    hp.messageDialog("Added new category successfully!");
+                    category_name.setText("");
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+        
+        
+//        int res = hp.confirmDialog("Please enter category");
+//             System.out.println("Original Password: " + res);
+        
+        
+    }//GEN-LAST:event_addCategoryBtnlogInBtn
+
+    private void addCategoryBtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_addCategoryBtnKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addCategoryBtnKeyPressed
+
+    private void categorylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categorylistMouseClicked
+        // TODO add your handling code here:
+        if (evt.getClickCount() == 2) {
+            try {
+                
+                 int input = hp.confirmDialog("Are you sure do you want to delete this category?");
+                 if(input == 0) {
+                    // Double-click detected
+                    String category = categorylist.getSelectedItem();
+                    System.out.println("Double "+ category);
+
+                    Statement st = con.createStatement();
+                    String query = "UPDATE categories SET status='1' WHERE category_name = '"+category+"'";
+                    st.execute(query);
+                    getCategories(); 
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }//GEN-LAST:event_categorylistMouseClicked
+
+    private void categorylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categorylistActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categorylistActionPerformed
 
     /**
      * @param args the command line arguments
@@ -361,16 +502,21 @@ public class Categories extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JButton addCategoryBtn;
     javax.swing.JButton categories;
+    javax.swing.JTextField category_name;
+    java.awt.List categorylist;
     javax.swing.JButton dashboard;
     javax.swing.JLabel jLabel1;
+    javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel4;
+    javax.swing.JLabel jLabel5;
+    javax.swing.JLabel jLabel6;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
-    javax.swing.JPanel jPanel5;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JButton logout;
     javax.swing.JLabel newCategory;

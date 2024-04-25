@@ -17,15 +17,14 @@ public class DBConnection {
     public static Connection connect() {
         
         String Surl, SUser,Spass;
-         // please change the port number depending on the port of running on your local ..
-        Surl = "jdbc:MySQL://localhost:3308/hols_kitchen";
+         // please change the port number depending on the port of mysql running on your local ..
+        Surl = "jdbc:MySQL://localhost:3306/hols_kitchen";
         SUser = "root";
         Spass = "";
         Connection con = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection(Surl, SUser, Spass);
-            //angelica test
         } catch(Exception e) {
                JOptionPane.showMessageDialog(null, e);
         }
