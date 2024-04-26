@@ -2,20 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package itec103_design;
+package itec103_design.Model;
 
 /**
  *
  * @author celis
  */
 public class User {
-    private String user_id;
+    private int user_id;
     private String firstname;    
     private String lastname;
     private String email;
     private String role;
 
-    public User(String user_id, String firstname, String lastname, String email, String role) {
+    public User(int user_id, String firstname, String lastname, String email, String role) {
         this.user_id = user_id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -23,11 +23,11 @@ public class User {
         this.role = role;
     }
     
-    public String getUserId() {
+    public int getUserId() {
         return user_id;
     }
 
-    public void setUserId(String user_id) {
+    public void setUserId(int user_id) {
         this.user_id = user_id;
     }
 

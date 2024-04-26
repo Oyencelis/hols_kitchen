@@ -4,16 +4,20 @@
  */
 package itec103_design;
 
+import itec103_design.Connection.DBConnection;
+import itec103_design.Helpers.HelperClass;
+import itec103_design.Model.Category;
+import itec103_design.Model.UserManager;
+import itec103_design.Model.User;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.border.MatteBorder;
-
+import java.util.List;
 /**
  *
  * @author Janice
@@ -29,28 +33,26 @@ public class Categories extends javax.swing.JFrame {
         initComponents();
         setUser();
         con = DBConnection.connect();
-        
-        this.setLocationRelativeTo(null);
-        newCategory.setBorder(new MatteBorder(0, 0, 2, 0, Color.ORANGE));
-        getCategories();
         hp = new HelperClass();
+        this.setLocationRelativeTo(null);
+        titleH1.setBorder(new MatteBorder(0, 0, 2, 0, Color.ORANGE));
+        getCategories();
+        
         
     }
     
     
-    public void getCategories() throws SQLException {
-        Statement st = con.createStatement();
-        String query = "SELECT * FROM categories WHERE status= '0' ORDER BY category_name ASC";
-        ResultSet rs = st.executeQuery(query);
+    public void getCategories(){
         categorylist.removeAll(); 
-        while(rs.next()){
-            String cat = rs.getString("category_name");
-            categorylist.add(cat); 
+        List<Category> cat = hp.getAllCategories();
+        for (Category category : cat) {
+            categorylist.add(category.getCategoryName());
         }
     }
+    
     public void setUser(){
         User currentUser = UserManager.getCurrentUser();
-        System.out.println("User: " + currentUser.getFirstname());
+        //System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
@@ -83,7 +85,7 @@ public class Categories extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel4 = new javax.swing.JPanel();
-        newCategory = new javax.swing.JLabel();
+        titleH1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         category_name = new javax.swing.JTextField();
         addCategoryBtn = new javax.swing.JButton();
@@ -242,10 +244,10 @@ public class Categories extends javax.swing.JFrame {
         jPanel4.setFocusable(false);
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        newCategory.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        newCategory.setText("Add New Category");
-        newCategory.setFocusTraversalPolicyProvider(true);
-        jPanel4.add(newCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 300, 40));
+        titleH1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        titleH1.setText("Add New Category");
+        titleH1.setFocusTraversalPolicyProvider(true);
+        jPanel4.add(titleH1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 300, 40));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setText("All Categories");
@@ -519,9 +521,9 @@ public class Categories extends javax.swing.JFrame {
     javax.swing.JPanel jPanel4;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JButton logout;
-    javax.swing.JLabel newCategory;
     javax.swing.JButton products;
     javax.swing.JButton purchased;
+    javax.swing.JLabel titleH1;
     javax.swing.JLabel user;
     javax.swing.JButton usersLink;
     // End of variables declaration//GEN-END:variables

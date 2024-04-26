@@ -4,6 +4,10 @@
  */
 package itec103_design;
 
+import itec103_design.Connection.DBConnection;
+import itec103_design.Helpers.HelperClass;
+import itec103_design.Model.UserManager;
+import itec103_design.Model.User;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -263,7 +267,7 @@ public class Login extends javax.swing.JFrame {
     
     public void formValidation(){
         String 
-                user_id = null,
+                
                 Email, 
                 Password, 
                 query, 
@@ -275,6 +279,8 @@ public class Login extends javax.swing.JFrame {
        
         
         int notFound = 0;
+        int user_id = 0;
+        
         try {
             Statement st = con.createStatement();
             if(email.getText().isBlank() && password.getText().isBlank()){
@@ -292,12 +298,12 @@ public class Login extends javax.swing.JFrame {
                 ResultSet rs = st.executeQuery(query);
                 while(rs.next()){
                     passDb = rs.getString("password");
-                    user_id = rs.getString("user_id");
+                    user_id = rs.getInt("user_id");
                     firstname = rs.getString("firstname");
                     lastname = rs.getString("lastname");
                     role = rs.getString("role");
                     notFound = 1;
-                    System.out.println("Original Password: " + Password);
+                    System.out.println("Original Password: " + user_id);
                     System.out.println("Hashed Password: " + passDb);
 
                 }

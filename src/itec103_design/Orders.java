@@ -4,6 +4,9 @@
  */
 package itec103_design;
 
+import itec103_design.Helpers.HelperClass;
+import itec103_design.Model.UserManager;
+import itec103_design.Model.User;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

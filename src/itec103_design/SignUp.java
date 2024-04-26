@@ -4,6 +4,8 @@
  */
 package itec103_design;
 
+import itec103_design.Connection.DBConnection;
+import itec103_design.Helpers.HelperClass;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
