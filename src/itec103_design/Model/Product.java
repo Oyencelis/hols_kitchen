@@ -98,4 +98,8 @@ public class Product {
                     + "      \"status\": \""+status+"\","   
             + "}," ;
     }
+
+    public int getInt(String product_id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

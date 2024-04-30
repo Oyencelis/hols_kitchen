@@ -11,8 +11,6 @@ import itec103_design.Model.Product;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
 import java.awt.Color;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,11 +19,10 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 /**
@@ -49,7 +46,8 @@ public class Products extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         titleH1.setBorder(new MatteBorder(0, 0, 2, 0, Color.ORANGE));
         getCategories();
-        getAllproducts();
+        getAllproducts("SELECT * FROM products WHERE status= '0' ORDER BY product_name ASC");
+        
     }
     
     public String getCategoryId() {
@@ -78,16 +76,23 @@ public class Products extends javax.swing.JFrame {
         }
     }
     
-    public void getAllproducts() {
-        List<Product> data = hp.getAllProducts();
+    public void getAllproducts(String query) {
+        List<Product> data = hp.getAllProducts(query);
         DefaultTableModel model = (DefaultTableModel) productTable.getModel();
         TableColumnModel columnModel = productTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(20);
         productTable.setRowHeight(30);
 //        productTable.setSelectionBackground(Color.ORANGE);
         JTableHeader header = productTable.getTableHeader();
         header.setBackground(Color.BLACK);
         header.setForeground(Color.WHITE);
+        columnModel.getColumn(0).setMinWidth(0);        
+        columnModel.getColumn(0).setMaxWidth(0);
+        columnModel.getColumn(1).setMinWidth(30);        
+        columnModel.getColumn(1).setMaxWidth(30);  
+        columnModel.getColumn(3).setMinWidth(80);        
+        columnModel.getColumn(3).setMaxWidth(80);  
+        
+
 
         model.setNumRows(0); 
         int i = 0;
@@ -98,7 +103,7 @@ public class Products extends javax.swing.JFrame {
             double amount = Double.parseDouble(price);
             DecimalFormat formatter = new DecimalFormat("#,###.00");
             price = formatter.format(amount);
-            model.addRow(new Object[]{i, prod.getProductName(), price, cat_name});
+            model.addRow(new Object[]{prod.getProductId(), i, prod.getProductName(), price, cat_name});
         }
     }
 
@@ -127,7 +132,7 @@ public class Products extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         titleH1 = new javax.swing.JLabel();
         price_label = new javax.swing.JLabel();
-        categoryDropdown = new javax.swing.JComboBox<>();
+        searchBy = new javax.swing.JComboBox<>();
         price = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
@@ -137,6 +142,11 @@ public class Products extends javax.swing.JFrame {
         addProductBtn = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         productTable = new javax.swing.JTable();
+        categoryDropdown = new javax.swing.JComboBox<>();
+        search_product = new javax.swing.JTextField();
+        find_product = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        find_product1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(237, 121, 13));
@@ -295,13 +305,13 @@ public class Products extends javax.swing.JFrame {
         price_label.setText("Price (PHP)");
         jPanel4.add(price_label, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 220, 110, -1));
 
-        categoryDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        categoryDropdown.addActionListener(new java.awt.event.ActionListener() {
+        searchBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {"All", "Name", "Price", "Category"}));
+        searchBy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                categoryDropdownActionPerformed(evt);
+                searchByActionPerformed(evt);
             }
         });
-        jPanel4.add(categoryDropdown, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 300, 30));
+        jPanel4.add(searchBy, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 80, 30));
 
         price.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         price.setHorizontalAlignment(javax.swing.JTextField.LEFT);
@@ -321,8 +331,8 @@ public class Products extends javax.swing.JFrame {
         jPanel4.add(price, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 250, 300, 30));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("Choose Category");
-        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 110, -1));
+        jLabel7.setText("Search Product");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 110, -1));
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -388,20 +398,20 @@ public class Products extends javax.swing.JFrame {
 
         productTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "#", "Name", "Price", "Category"
+                "id", "#", "Name", "Price", "Category"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -412,9 +422,69 @@ public class Products extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productTableMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(productTable);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 400, 390));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 400, 370));
+
+        categoryDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        categoryDropdown.setFocusCycleRoot(true);
+        categoryDropdown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryDropdownActionPerformed(evt);
+            }
+        });
+        jPanel4.add(categoryDropdown, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 300, 30));
+
+        search_product.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        search_product.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        search_product.setToolTipText("");
+        search_product.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        search_product.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                search_productMouseClicked(evt);
+            }
+        });
+        search_product.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_productActionPerformed(evt);
+            }
+        });
+        search_product.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                search_productKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                search_productKeyReleased(evt);
+            }
+        });
+        jPanel4.add(search_product, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 250, 30));
+
+        find_product.setBackground(new java.awt.Color(237, 121, 13));
+        find_product.setIcon(new javax.swing.ImageIcon(getClass().getResource("/search.png"))); // NOI18N
+        find_product.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                find_productActionPerformed(evt);
+            }
+        });
+        jPanel4.add(find_product, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, 70, 30));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setText("Choose Category");
+        jPanel4.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 110, -1));
+
+        find_product1.setBackground(new java.awt.Color(204, 204, 204));
+        find_product1.setText("Clear");
+        find_product1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                find_product1ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(find_product1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, 70, 30));
 
         jScrollPane1.setViewportView(jPanel4);
 
@@ -556,7 +626,7 @@ public class Products extends javax.swing.JFrame {
                     "VALUES('"+cat_id+"','"+product+"', '"+price_val+"')";
                     st.execute(query);
                     hp.messageDialog("Added new product successfully!");
-                    getAllproducts();
+                    getAllproducts("SELECT * FROM products WHERE status= '0' ORDER BY product_name ASC");
                     categoryDropdown.setSelectedIndex(-1);
                     product_name.setText("");
                     price.setText("");
@@ -574,9 +644,100 @@ public class Products extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_addProductBtnKeyPressed
 
+    private void searchByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByActionPerformed
+//       String cat_id = getCategoryId();
+//       String prod = search_product.getText();
+//       String Column = (String) searchBy.getSelectedItem();
+//       String sql = "Select* from categories WHERE " + searchBy + "LIKE '"+prod+"%'";
+//       
+       
+    }//GEN-LAST:event_searchByActionPerformed
+
     private void categoryDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryDropdownActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryDropdownActionPerformed
+
+    private void search_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_productActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_productActionPerformed
+
+    private void search_productKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_productKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_productKeyPressed
+
+    private void find_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_find_productActionPerformed
+        String options = String.valueOf(searchBy.getSelectedItem());
+        String srchValue = search_product.getText();
+        String query = null;
+        
+        
+        if(!search_product.getText().isBlank()){
+            String cat_id = hp.getCategoryByName(srchValue);
+            switch(options) {
+                case "All":
+                    query = "SELECT * FROM products where product_name LIKE'"+srchValue+"%' OR price LIKE'"+srchValue+"%' OR category_id ='"+cat_id+"%'";
+                    break;
+                case "Name":
+                  query = "SELECT * FROM products where product_name LIKE'"+srchValue+"%'";
+                  System.out.print("this is name");
+                  break;
+                case "Price":
+                  query = "SELECT * FROM products where price LIKE'"+srchValue+"%'";
+                  System.out.print("Ths is price");
+                  break;
+                case "Category":
+                  query = "SELECT * FROM products where category_id ='"+cat_id+"%'";
+                  System.out.print("This is category" + cat_id);
+                  break;  
+                default:
+                  System.out.print("This is blank");
+            }
+            getAllproducts(query);
+        } else {
+            hp.errorMessageDialog("No value to search");
+        }    
+        
+    }//GEN-LAST:event_find_productActionPerformed
+
+    private void search_productMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_productMouseClicked
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_search_productMouseClicked
+
+    private void search_productKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_productKeyReleased
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_search_productKeyReleased
+
+    private void find_product1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_find_product1ActionPerformed
+        search_product.setText("");
+        searchBy.setSelectedIndex(0);
+        getAllproducts("SELECT * FROM products WHERE status= '0' ORDER BY product_name ASC");
+        
+    }//GEN-LAST:event_find_product1ActionPerformed
+
+    private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            try {
+                 int input = hp.confirmDialog("Are you sure do you want to delete this product?");
+                 if(input == 0) {
+                    int column = 0;
+                    int row = productTable.getSelectedRow();
+                    String valueId = productTable.getModel().getValueAt(row, column).toString();
+                    System.out.println("Double "+ valueId);
+
+                    Statement st = con.createStatement();
+                    String query = "UPDATE products SET status='1' WHERE product_id = '"+valueId+"'";
+                    st.execute(query);
+                    
+                    getAllproducts("SELECT * FROM products WHERE status= '0' ORDER BY product_name ASC");
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+    }//GEN-LAST:event_productTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -627,10 +788,13 @@ public class Products extends javax.swing.JFrame {
     javax.swing.JButton categories;
     javax.swing.JComboBox<String> categoryDropdown;
     javax.swing.JButton dashboard;
+    javax.swing.JButton find_product;
+    javax.swing.JButton find_product1;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel7;
     javax.swing.JLabel jLabel8;
+    javax.swing.JLabel jLabel9;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;
@@ -646,6 +810,8 @@ public class Products extends javax.swing.JFrame {
     javax.swing.JTextField product_name;
     javax.swing.JButton products;
     javax.swing.JButton purchased;
+    javax.swing.JComboBox<String> searchBy;
+    javax.swing.JTextField search_product;
     javax.swing.JLabel titleH1;
     javax.swing.JLabel user;
     javax.swing.JButton usersLink;

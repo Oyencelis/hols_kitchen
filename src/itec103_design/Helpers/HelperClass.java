@@ -95,8 +95,7 @@ public class HelperClass {
     }
     
     
-    public List<Product> getAllProducts() {
-        String query = "SELECT * FROM products WHERE status= '0' ORDER BY product_name ASC";
+    public List<Product> getAllProducts(String query) {
         List products = new ArrayList<>();
 
         try{
