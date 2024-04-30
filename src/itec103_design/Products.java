@@ -136,7 +136,7 @@ public class Products extends javax.swing.JFrame {
         price = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         product_name = new javax.swing.JTextField();
         addProductBtn = new javax.swing.JButton();
@@ -334,31 +334,26 @@ public class Products extends javax.swing.JFrame {
         jLabel7.setText("Search Product");
         jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 110, -1));
 
+        jLabel6.setText("- Double click the row to edit item");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(74, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addComponent(jLabel6)
+                .addGap(76, 76, 76))
         );
 
-        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 380, 300, 20));
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 10, Short.MAX_VALUE)
-        );
-
-        jPanel4.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 340, 300, -1));
+        jPanel4.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 340, 300, 110));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel8.setText("Product Name");
@@ -736,7 +731,7 @@ public class Products extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        }
     }//GEN-LAST:event_productTableMouseClicked
 
     /**
@@ -792,6 +787,7 @@ public class Products extends javax.swing.JFrame {
     javax.swing.JButton find_product1;
     javax.swing.JLabel jLabel1;
     javax.swing.JLabel jLabel3;
+    javax.swing.JLabel jLabel6;
     javax.swing.JLabel jLabel7;
     javax.swing.JLabel jLabel8;
     javax.swing.JLabel jLabel9;
@@ -800,7 +796,6 @@ public class Products extends javax.swing.JFrame {
     javax.swing.JPanel jPanel3;
     javax.swing.JPanel jPanel4;
     javax.swing.JPanel jPanel6;
-    javax.swing.JPanel jPanel7;
     javax.swing.JScrollPane jScrollPane1;
     javax.swing.JScrollPane jScrollPane2;
     javax.swing.JButton logout;

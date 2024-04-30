@@ -15,19 +15,21 @@ public class Order {
     private int user_id;
     private String customer_name;
     private int qty;
+    private int cash;
     private String order_type;
     private String created_at;
     private String updated_at;
     private int status;
             
             
-    public Order(int order_id, int reference, int product_id, int user_id, String customer_name, int qty, String order_type, String created_at, String updated_at, int status) {
+    public Order(int order_id, int reference, int product_id, int user_id, String customer_name, int qty, int cash, String order_type, String created_at, String updated_at, int status) {
         this.order_id = order_id;
         this.reference = reference;
         this.product_id = product_id;
         this.user_id = user_id;
         this.customer_name = customer_name;
         this.qty = qty;
+        this.cash = cash;
         this.order_type = order_type;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -83,6 +85,14 @@ public class Order {
         this.qty = qty;
     }
     
+    public int getCash() {
+        return cash;
+    }
+
+    public void setCash(int cash) {
+        this.cash = cash;
+    }
+    
     public String getOrderType() {
         return order_type;
     }
@@ -125,6 +135,7 @@ public class Order {
                     + "      \"user_id\": \""+user_id+"\","   
                     + "      \"customer_name\": \""+customer_name+"\","   
                     + "      \"qty\": \""+qty+"\","
+                    + "      \"cash\": \""+cash+"\","
                     + "      \"order_type\": \""+order_type+"\","
                     + "      \"created_at\": \""+created_at+"\","   
                     + "      \"updated_at\": \""+updated_at+"\","   
