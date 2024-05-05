@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 05, 2024 at 05:01 PM
+-- Generation Time: May 05, 2024 at 06:02 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -57,7 +57,28 @@ INSERT INTO `categories` (`category_id`, `category_name`, `status`) VALUES
 (18, 'A', 1),
 (19, 'aa', 1),
 (20, 'aa', 1),
-(21, 'AA', 1);
+(21, 'AA', 1),
+(22, 'asas', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` int(10) NOT NULL,
+  `reference` int(10) NOT NULL,
+  `product_id` int(20) NOT NULL,
+  `user_id` int(20) NOT NULL,
+  `customer_name` varchar(255) NOT NULL,
+  `qty` int(10) NOT NULL,
+  `cash` int(10) NOT NULL,
+  `order_type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -93,12 +114,13 @@ INSERT INTO `products` (`product_id`, `category_id`, `product_name`, `price`, `c
 (11, 3, 'Rice', 50, '2024-04-26 19:32:16', '2024-04-27 03:32:16', 0),
 (12, 4, 'Best Seller', 5010, '2024-04-26 19:33:25', '2024-04-27 03:33:25', 0),
 (13, 2, 'Pope', 20, '2024-04-26 19:33:41', '2024-04-27 03:33:41', 0),
-(14, 2, 'asas', 32.453, '2024-04-27 09:37:07', '2024-04-27 17:37:07', 0),
+(14, 2, 'asas', 32.453, '2024-04-27 09:37:07', '2024-05-05 23:16:05', 1),
 (15, 2, 'sds', 23, '2024-04-27 09:47:53', '2024-04-27 17:47:53', 0),
 (16, 1, 'AAA', 23, '2024-04-27 09:48:06', '2024-04-27 17:48:06', 0),
 (17, 2, 'WW', 1222, '2024-04-28 18:33:45', '2024-04-29 02:33:45', 0),
 (18, 1, '111', 120002, '2024-04-28 18:34:03', '2024-04-30 20:58:44', 1),
-(19, 1, '222', 1221220, '2024-04-28 18:34:24', '2024-04-30 20:58:56', 1);
+(19, 1, '222', 1221220, '2024-04-28 18:34:24', '2024-04-30 20:58:56', 1),
+(20, 22, 'asa', 12, '2024-05-05 15:15:42', '2024-05-05 23:18:32', 1);
 
 -- --------------------------------------------------------
 
@@ -141,6 +163,12 @@ ALTER TABLE `categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`);
+
+--
 -- Indexes for table `products`
 --
 ALTER TABLE `products`
@@ -160,13 +188,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `category_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `product_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `product_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
