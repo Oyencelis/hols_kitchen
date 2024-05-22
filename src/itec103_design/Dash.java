@@ -7,9 +7,11 @@ package itec103_design;
 import itec103_design.Helpers.HelperClass;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,9 +29,10 @@ public class Dash extends javax.swing.JFrame {
         setUser();
         hp = new HelperClass();
         this.setLocationRelativeTo(null);
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
     }
     
-    public void setUser(){
+    private void setUser(){
         User currentUser = UserManager.getCurrentUser();
         System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
@@ -39,7 +42,6 @@ public class Dash extends javax.swing.JFrame {
             usersLink.setVisible(false);
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,6 +71,7 @@ public class Dash extends javax.swing.JFrame {
         setBackground(new java.awt.Color(237, 121, 13));
         setResizable(false);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setAutoscrolls(true);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -346,10 +349,12 @@ public class Dash extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new Dash().setVisible(true);
                 
             }
         });
+        
         
     }
 

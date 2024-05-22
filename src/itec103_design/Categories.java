@@ -10,6 +10,7 @@ import itec103_design.Model.Category;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +21,7 @@ import javax.swing.border.MatteBorder;
 import java.util.List;
 /**
  *
- * @author Janice
+ * @author Inan
  */
 public class Categories extends javax.swing.JFrame {
 
@@ -32,6 +33,7 @@ public class Categories extends javax.swing.JFrame {
     public Categories() throws SQLException {
         initComponents();
         setUser();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
         con = DBConnection.connect();
         hp = new HelperClass();
         this.setLocationRelativeTo(null);
@@ -42,7 +44,7 @@ public class Categories extends javax.swing.JFrame {
     }
     
     
-    public void getCategories(){
+    private void getCategories(){
         categorylist.removeAll(); 
         List<Category> cat = hp.getAllCategories();
         for (Category category : cat) {
@@ -50,7 +52,7 @@ public class Categories extends javax.swing.JFrame {
         }
     }
     
-    public void setUser(){
+    private void setUser(){
         User currentUser = UserManager.getCurrentUser();
         //System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
@@ -58,6 +60,10 @@ public class Categories extends javax.swing.JFrame {
         int number = Integer.parseInt(role);
         if(number == 0) {
             usersLink.setVisible(false);
+            addCategoryBtn.setVisible(false);
+            adLabel.setVisible(true);
+        } else if(number == 1) {
+            adLabel.setVisible(false);
         }
     }
 
@@ -90,13 +96,15 @@ public class Categories extends javax.swing.JFrame {
         category_name = new javax.swing.JTextField();
         addCategoryBtn = new javax.swing.JButton();
         categorylist = new java.awt.List();
-        jLabel5 = new javax.swing.JLabel();
+        adLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(237, 121, 13));
         setResizable(false);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setAutoscrolls(true);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -298,12 +306,17 @@ public class Categories extends javax.swing.JFrame {
         });
         jPanel4.add(categorylist, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 340));
 
-        jLabel5.setText("Double click the item to delete");
-        jPanel4.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 200, -1));
+        adLabel.setBackground(new java.awt.Color(255, 255, 255));
+        adLabel.setText("Only Available for Administrator");
+        jPanel4.add(adLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 150, 200, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Category Name");
         jPanel4.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 80, 110, -1));
+
+        jLabel7.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Double click the item to delete");
+        jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 200, -1));
 
         jScrollPane1.setViewportView(jPanel4);
 
@@ -398,6 +411,7 @@ public class Categories extends javax.swing.JFrame {
 
     private void addCategoryBtnlogInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCategoryBtnlogInBtn
         String category = category_name.getText();
+        
         if(category_name.getText().isBlank()){
             hp.errorMessageDialog("Please enter category");
         } else {
@@ -434,25 +448,30 @@ public class Categories extends javax.swing.JFrame {
 
     private void categorylistMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_categorylistMouseClicked
         // TODO add your handling code here:
-        if (evt.getClickCount() == 2) {
-            try {
-                
-                 int input = hp.confirmDialog("Are you sure do you want to delete this category?");
-                 if(input == 0) {
-                    // Double-click detected
-                    String category = categorylist.getSelectedItem();
-                    System.out.println("Double "+ category);
+        String role;
+        User c = UserManager.getCurrentUser();
+        role = c.getRole();
+        if(Integer.valueOf(role) == 1){
+            if (evt.getClickCount() == 2) {
+                try {
 
-                    Statement st = con.createStatement();
-                    String query = "UPDATE categories SET status='1' WHERE category_name = '"+category+"'";
-                    st.execute(query);
-                    getCategories(); 
+                     int input = hp.confirmDialog("Are you sure do you want to delete this category?");
+                     if(input == 0) {
+                        // Double-click detected
+                        String category = categorylist.getSelectedItem();
+                        System.out.println("Double "+ category);
+
+                        Statement st = con.createStatement();
+                        String query = "UPDATE categories SET status='1' WHERE category_name = '"+category+"'";
+                        st.execute(query);
+                        getCategories(); 
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } 
+            } 
+        }
     }//GEN-LAST:event_categorylistMouseClicked
 
     private void categorylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categorylistActionPerformed
@@ -504,6 +523,7 @@ public class Categories extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JLabel adLabel;
     javax.swing.JButton addCategoryBtn;
     javax.swing.JButton categories;
     javax.swing.JTextField category_name;
@@ -513,8 +533,8 @@ public class Categories extends javax.swing.JFrame {
     javax.swing.JLabel jLabel2;
     javax.swing.JLabel jLabel3;
     javax.swing.JLabel jLabel4;
-    javax.swing.JLabel jLabel5;
     javax.swing.JLabel jLabel6;
+    javax.swing.JLabel jLabel7;
     javax.swing.JPanel jPanel1;
     javax.swing.JPanel jPanel2;
     javax.swing.JPanel jPanel3;

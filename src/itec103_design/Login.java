@@ -8,6 +8,7 @@ import itec103_design.Connection.DBConnection;
 import itec103_design.Helpers.HelperClass;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -22,7 +23,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
- * @author Janice
+ * @author Inan
  */
 public class Login extends javax.swing.JFrame {
 
@@ -33,7 +34,7 @@ public class Login extends javax.swing.JFrame {
     HelperClass hp = null;
     public Login() {
         initComponents();
- 
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
         hp = new HelperClass();
         con = DBConnection.connect();
         signuplabel.addMouseListener(new MouseAdapter()  

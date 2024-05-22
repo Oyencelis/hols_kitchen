@@ -11,6 +11,7 @@ import itec103_design.Model.Product;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,12 +23,11 @@ import java.util.logging.Logger;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 /**
  *
- * @author Janice
+ * @author Inan
  */
 
 public class Products extends javax.swing.JFrame {
@@ -41,6 +41,7 @@ public class Products extends javax.swing.JFrame {
         
         initComponents();
         setUser();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
         con = DBConnection.connect();
         hp = new HelperClass();
         this.setLocationRelativeTo(null);
@@ -50,12 +51,12 @@ public class Products extends javax.swing.JFrame {
         
     }
     
-    public String getCategoryId() {
+    private String getCategoryId() {
       String name = String.valueOf(categoryDropdown.getSelectedItem());
       return hp.getCategoryByName(name);
       
     }
-    public void setUser(){
+    private void setUser(){
         User currentUser = UserManager.getCurrentUser();
         System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
@@ -67,7 +68,7 @@ public class Products extends javax.swing.JFrame {
     }
     
     
-    public void getCategories(){
+    private void getCategories(){
         categoryDropdown.removeAllItems(); 
         List<Category> cat = hp.getAllCategories();
         categoryDropdown.addItem("");
@@ -76,15 +77,15 @@ public class Products extends javax.swing.JFrame {
         }
     }
     
-    public void getAllproducts(String query) {
+    private void getAllproducts(String query) {
         List<Product> data = hp.getAllProducts(query);
         DefaultTableModel model = (DefaultTableModel) productTable.getModel();
         TableColumnModel columnModel = productTable.getColumnModel();
         productTable.setRowHeight(30);
 //        productTable.setSelectionBackground(Color.ORANGE);
         JTableHeader header = productTable.getTableHeader();
-        header.setBackground(Color.BLACK);
-        header.setForeground(Color.WHITE);
+//        header.setBackground(Color.BLACK);
+//        header.setForeground(Color.WHITE);
         columnModel.getColumn(0).setMinWidth(0);        
         columnModel.getColumn(0).setMaxWidth(0);
         columnModel.getColumn(1).setMinWidth(30);        
@@ -152,6 +153,7 @@ public class Products extends javax.swing.JFrame {
         setBackground(new java.awt.Color(237, 121, 13));
         setResizable(false);
 
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setAutoscrolls(true);
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -670,14 +672,14 @@ public class Products extends javax.swing.JFrame {
             String cat_id = hp.getCategoryByName(srchValue);
             switch(options) {
                 case "All":
-                    query = "SELECT * FROM products where product_name LIKE'"+srchValue+"%' OR price LIKE'"+srchValue+"%' OR category_id ='"+cat_id+"%'";
+                    query = "SELECT * FROM products where product_name LIKE '%"+srchValue+"%' OR price LIKE '%"+srchValue+"%' OR category_id ='"+cat_id+"'";
                     break;
                 case "Name":
-                  query = "SELECT * FROM products where product_name LIKE'"+srchValue+"%'";
+                  query = "SELECT * FROM products where product_name LIKE'%"+srchValue+"%'";
                   System.out.print("this is name");
                   break;
                 case "Price":
-                  query = "SELECT * FROM products where price LIKE'"+srchValue+"%'";
+                  query = "SELECT * FROM products where price LIKE'%"+srchValue+"%'";
                   System.out.print("Ths is price");
                   break;
                 case "Category":

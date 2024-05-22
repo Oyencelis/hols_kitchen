@@ -4,9 +4,13 @@
  */
 package itec103_design;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
 /**
  *
- * @author Janice
+ * @author Inan
  */
 public class Itec103_design {
 
@@ -20,6 +24,15 @@ public class Itec103_design {
         Login.pack();
         Login.setLocationRelativeTo(null);
         
+        try {
+            // Set Nimbus Look and Feel
+            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        
     }
+    
+    
     
 }

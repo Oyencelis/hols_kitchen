@@ -11,25 +11,23 @@ package itec103_design.Model;
 public class Order {
     private int order_id;
     private int reference;
-    private int product_id;
     private int user_id;
     private String customer_name;
-    private int qty;
     private int cash;
+    private String cash_type;
     private String order_type;
     private String created_at;
     private String updated_at;
     private int status;
             
-            
-    public Order(int order_id, int reference, int product_id, int user_id, String customer_name, int qty, int cash, String order_type, String created_at, String updated_at, int status) {
+    
+    public Order(int order_id, int reference, int user_id, String customer_name, int cash,String cash_type, String order_type, String created_at, String updated_at, int status) {
         this.order_id = order_id;
         this.reference = reference;
-        this.product_id = product_id;
         this.user_id = user_id;
         this.customer_name = customer_name;
-        this.qty = qty;
         this.cash = cash;
+        this.cash_type = cash_type;
         this.order_type = order_type;
         this.created_at = created_at;
         this.updated_at = updated_at;
@@ -53,13 +51,6 @@ public class Order {
         this.reference = reference;
     }
     
-    public int getProductId() {
-        return product_id;
-    }
-
-    public void setProductId(int product_id) {
-        this.product_id = product_id;
-    }
     
     public int getUserId() {
         return user_id;
@@ -77,20 +68,20 @@ public class Order {
         this.customer_name = customer_name;
     }
     
-    public int getQty() {
-        return qty;
-    }
-
-    public void setQty(int qty) {
-        this.qty = qty;
-    }
-    
     public int getCash() {
         return cash;
     }
 
     public void setCash(int cash) {
         this.cash = cash;
+    }
+    
+    public String getCashType() {
+        return cash_type;
+    }
+    
+    public void setCashType(String cash_type) {
+        this.cash_type = cash_type;
     }
     
     public String getOrderType() {
@@ -130,12 +121,11 @@ public class Order {
         
         return "{" 
                     + "      \"order_id\": \""+order_id+"\","
-                    + "      \"reference\": \""+reference+"\","
-                    + "      \"product_id\": \""+product_id+"\","                 
+                    + "      \"reference\": \""+reference+"\","              
                     + "      \"user_id\": \""+user_id+"\","   
-                    + "      \"customer_name\": \""+customer_name+"\","   
-                    + "      \"qty\": \""+qty+"\","
+                    + "      \"customer_name\": \""+customer_name+"\","  
                     + "      \"cash\": \""+cash+"\","
+                    + "      \"cash_type\": \""+cash_type+"\","
                     + "      \"order_type\": \""+order_type+"\","
                     + "      \"created_at\": \""+created_at+"\","   
                     + "      \"updated_at\": \""+updated_at+"\","   

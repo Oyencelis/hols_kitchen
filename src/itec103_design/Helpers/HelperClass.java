@@ -7,12 +7,15 @@ package itec103_design.Helpers;
 import itec103_design.Categories;
 import itec103_design.Connection.DBConnection;
 import itec103_design.Model.Category;
+import itec103_design.Model.Order;
+import itec103_design.Model.OrderItem;
 import itec103_design.Model.Product;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +43,13 @@ public class HelperClass {
         return input;
     }
     
-    
+     public String numberFormatter(String price) {
+        double amount = Double.parseDouble(price);
+        DecimalFormat formatter = new DecimalFormat("#,###.00");
+        price = formatter.format(amount);
+        
+        return price;
+    }
     public List<Category> getAllCategories() {
         String query = "SELECT * FROM categories WHERE status= '0' ORDER BY category_name ASC";
         List categories = new ArrayList<>();
@@ -118,4 +127,74 @@ public class HelperClass {
         }
         return products;
     }
+    
+    public List<Order> getAllOrders(String query){
+        List orders = new ArrayList<>();
+        
+        try{
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            while(rs.next()) {
+                int order_id = rs.getInt("order_id");                
+                int reference = rs.getInt("reference");
+                int user_id = rs.getInt("user_id");
+                String customer_name = rs.getString("customer_name");
+                int cash = rs.getInt("cash");
+                String cash_type = rs.getString("cash_type");                
+                String order_type = rs.getString("order_type");
+
+                String created_at = rs.getString("created_at");
+                String updated_at = rs.getString("updated_at");
+                int status = rs.getInt("status");
+                Order order = new Order(order_id, reference, user_id, customer_name, cash, cash_type, order_type, created_at, updated_at, status);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return orders;
+    }
+    
+    public List<OrderItem> getOrderItemByRef (String query){
+        List orderItems = new ArrayList<>();
+        
+        try{
+            
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            
+            while(rs.next()) {
+                int order_item_id = rs.getInt("order_item_id");
+                int order_reference = rs.getInt("order_reference");
+                int product_id = rs.getInt("product_id");
+                String qty = rs.getString("qty");
+                
+                OrderItem orderItem = new OrderItem(order_item_id, order_reference, product_id, qty);
+                orderItems.add(orderItem);
+            }
+            
+        } catch (SQLException e){
+            Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
+        return orderItems;
+    }
+    
+    
+    public String getDetail(String query, String return_field) {
+        String field = null;
+        try{
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                field = rs.getString(return_field);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return field;
+    }
+    
 }
