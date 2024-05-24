@@ -15,13 +15,14 @@ public class Order {
     private String customer_name;
     private int cash;
     private String cash_type;
-    private String order_type;
+    private String order_type;    
+    private String total;
     private String created_at;
     private String updated_at;
     private int status;
             
     
-    public Order(int order_id, int reference, int user_id, String customer_name, int cash,String cash_type, String order_type, String created_at, String updated_at, int status) {
+    public Order(int order_id, int reference, int user_id, String customer_name, int cash,String cash_type, String order_type, String total, String created_at, String updated_at, int status) {
         this.order_id = order_id;
         this.reference = reference;
         this.user_id = user_id;
@@ -29,6 +30,8 @@ public class Order {
         this.cash = cash;
         this.cash_type = cash_type;
         this.order_type = order_type;
+        this.total = total;
+
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.status = status;
@@ -92,6 +95,14 @@ public class Order {
         this.order_type = order_type;
     }
     
+    public String getTotal() {
+        return total;
+    }
+    
+    public void setTotal(String total) {
+        this.order_type = total;
+    }
+    
     
     public String getCreatedAt() {
         return created_at;
@@ -127,6 +138,7 @@ public class Order {
                     + "      \"cash\": \""+cash+"\","
                     + "      \"cash_type\": \""+cash_type+"\","
                     + "      \"order_type\": \""+order_type+"\","
+                    + "      \"total\": \""+total+"\","
                     + "      \"created_at\": \""+created_at+"\","   
                     + "      \"updated_at\": \""+updated_at+"\","   
                     + "      \"status\": \""+status+"\","   

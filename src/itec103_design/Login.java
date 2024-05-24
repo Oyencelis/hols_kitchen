@@ -17,6 +17,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -275,12 +276,15 @@ public class Login extends javax.swing.JFrame {
                 passDb = null, 
                 firstname = null,
                 lastname = null, 
+                eml= null,
+                created_at = null,
+                updated_at = null,
                 verifyPass = null,
                 role = null;
        
         
         int notFound = 0;
-        int user_id = 0;
+        int user_id = 0, status =0;
         
         try {
             Statement st = con.createStatement();
@@ -294,34 +298,40 @@ public class Login extends javax.swing.JFrame {
                 Email = email.getText();
                 Password = passwordHash(password.getText());
                 //String hashedPassword = hashPassword(Password);
-
+                
                 query = "SELECT * FROM users WHERE email= '"+Email+"'";
-                ResultSet rs = st.executeQuery(query);
-                while(rs.next()){
-                    passDb = rs.getString("password");
-                    user_id = rs.getInt("user_id");
-                    firstname = rs.getString("firstname");
-                    lastname = rs.getString("lastname");
-                    role = rs.getString("role");
-                    notFound = 1;
-                    System.out.println("Original Password: " + user_id);
-                    System.out.println("Hashed Password: " + passDb);
-
-                }
-                if(notFound == 1 && Password.equals(passDb)){
-                    User currentUser = new User(user_id, firstname,lastname, Email, role);
-                    UserManager.setCurrentUser(currentUser);
-                    //System.out.println("User: " + currentUser.getUsername());
-                    Dash DashFrame = new Dash();
-                    //DashFrame.setUser(currentUser.getUsername());
-                    DashFrame.setVisible(true);
-                    DashFrame.pack();
-                    DashFrame.setLocationRelativeTo(null);
-                    this.dispose();
-                }else{
+                List<User> users = hp.getUsers(query);
+//                ResultSet rs = st.executeQuery(query);
+                if(!users.isEmpty()){
+//ser(int user_id, String firstname, String lastname, String email, String password, String created_at, String updated_at, String role, int status) {
+                    for(User user: users) {
+                        
+                        user_id = user.getUserId();
+                        firstname = user.getFirstname();
+                        lastname = user.getLastname();
+                        eml = user.getEmail();
+                        passDb = user.getPassword();
+                        created_at = user.getCreatedAt();
+                        updated_at = user.getUpdatedAt();
+                        role = user.getRole();
+                        status = user.getStatus();
+                        notFound = 1;
+                        System.out.println("Original Password: " + user_id);
+                        System.out.println("Hashed Password: " + passDb);
+                    }
+                    if(notFound == 1 && Password.equals(passDb)){
+                        User currentUser = new User(user_id, firstname, lastname, eml, Password, created_at, updated_at,  role, status);
+                        UserManager.setCurrentUser(currentUser);
+                        System.out.println("User: " + currentUser.getPassword());
+                       boolean d = hp.changeFrame(new Dash());
+                       if(d)this.dispose();
+                       
+                    }else{
+                        hp.errorMessageDialog("Incorrect Email or Password");
+                    }
+                } else {
                     hp.errorMessageDialog("Incorrect Email or Password");
                 }
-
                 password.setText("");
 
             }

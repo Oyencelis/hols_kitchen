@@ -20,6 +20,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -336,7 +337,7 @@ public class Products extends javax.swing.JFrame {
         jLabel7.setText("Search Product");
         jPanel4.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 110, -1));
 
-        jLabel6.setText("- Double click the row to edit item");
+        jLabel6.setText("- Double click the row to delete item");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -518,22 +519,17 @@ public class Products extends javax.swing.JFrame {
 
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
-            Login LoginFrame = new Login();
-            LoginFrame.setVisible(true);
-            LoginFrame.pack();
-            LoginFrame.setLocationRelativeTo(null);
-            this.dispose();   
+               
+            boolean d = hp.changeFrame(new Login());
+            if(d)this.dispose();
         }
     }//GEN-LAST:event_logoutActionPerformed
 
 
     private void dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardActionPerformed
-        // TODO add your handling code here:
-        Dash Frame = new Dash();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+        
+        boolean d = hp.changeFrame(new Dash());
+        if(d)this.dispose();
     }//GEN-LAST:event_dashboardActionPerformed
 
     private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
@@ -555,21 +551,14 @@ public class Products extends javax.swing.JFrame {
     }//GEN-LAST:event_productsActionPerformed
 
     private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
-        // TODO add your handling code here:
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+        boolean d = hp.changeFrame(new Orders());
+        if(d)this.dispose(); 
     }//GEN-LAST:event_purchasedActionPerformed
+    
 
     private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
-        // TODO add your handling code here:
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();
+        boolean d = hp.changeFrame(new Users());
+        if(d)this.dispose();
     }//GEN-LAST:event_usersLinkActionPerformed
 
     private void priceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_priceActionPerformed
@@ -671,23 +660,20 @@ public class Products extends javax.swing.JFrame {
         if(!search_product.getText().isBlank()){
             String cat_id = hp.getCategoryByName(srchValue);
             switch(options) {
-                case "All":
-                    query = "SELECT * FROM products where product_name LIKE '%"+srchValue+"%' OR price LIKE '%"+srchValue+"%' OR category_id ='"+cat_id+"'";
-                    break;
-                case "Name":
-                  query = "SELECT * FROM products where product_name LIKE'%"+srchValue+"%'";
-                  System.out.print("this is name");
-                  break;
-                case "Price":
-                  query = "SELECT * FROM products where price LIKE'%"+srchValue+"%'";
-                  System.out.print("Ths is price");
-                  break;
-                case "Category":
-                  query = "SELECT * FROM products where category_id ='"+cat_id+"%'";
-                  System.out.print("This is category" + cat_id);
-                  break;  
-                default:
-                  System.out.print("This is blank");
+                case "All" -> query = "SELECT * FROM products where product_name LIKE '%"+srchValue+"%' OR price LIKE '%"+srchValue+"%' OR category_id ='"+cat_id+"'";
+                case "Name" -> {
+                    query = "SELECT * FROM products where product_name LIKE'%"+srchValue+"%'";
+                    System.out.print("this is name");
+                }
+                case "Price" -> {
+                    query = "SELECT * FROM products where price LIKE'%"+srchValue+"%'";
+                    System.out.print("Ths is price");
+                }
+                case "Category" -> {
+                    query = "SELECT * FROM products where category_id ='"+cat_id+"%'";
+                    System.out.print("This is category" + cat_id);
+                }
+                default -> System.out.print("This is blank");
             }
             getAllproducts(query);
         } else {
@@ -773,7 +759,7 @@ public class Products extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dash().setVisible(true);
+                new Products().setVisible(true);
                 
             }
         });

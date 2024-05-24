@@ -20,16 +20,12 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -426,7 +422,7 @@ public class Ordering extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(dineIn)
                             .addComponent(takeOut))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel10)
                             .addComponent(mopCash)
@@ -443,9 +439,9 @@ public class Ordering extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
-                                .addComponent(changeAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(changeAmount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -593,8 +589,8 @@ public class Ordering extends javax.swing.JFrame {
                     .addComponent(backBTN)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(productPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(productPanel)
+                .addContainerGap())
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -677,9 +673,9 @@ public class Ordering extends javax.swing.JFrame {
             User currentUser = UserManager.getCurrentUser();
             try{
                     Statement st = con.createStatement();
-                
-                    String query = "INSERT INTO orders(reference, user_id, customer_name, cash, cash_type, order_type)" +
-                    "VALUES('"+reference_id+"','"+currentUser.getUserId()+"', '"+cus_name+"', '"+cash_amount+"', '"+cashType+"', '"+orderType+"')";
+                    String tot = String.valueOf(total);
+                    String query = "INSERT INTO orders(reference, user_id, customer_name, cash, cash_type, order_type, total)" +
+                    "VALUES('"+reference_id+"','"+currentUser.getUserId()+"', '"+cus_name+"', '"+cash_amount+"', '"+cashType+"', '"+orderType+"', '"+tot+"')";
                     st.execute(query);
                     boolean success = insertOrderItem(orderItem);
                     if (success) {
@@ -760,16 +756,18 @@ public class Ordering extends javax.swing.JFrame {
         // TODO add your handling code here:
         String regex = "^\\d*\\.?\\d*$";
         String value = cashInput.getText();
+//        cash_amount = 0;
         if (!value.matches(regex)) {
             hp.errorMessageDialog("Enter Number Only");
             cashInput.setText("");
             if(!cashInput.getText().isEmpty()) {
                 cashInput.setText("");
+                cash_amount = 0;
             }
         } else {
             cash_amount = Double.parseDouble(cashInput.getText());
-            getFinalOrder();
         }
+        getFinalOrder();
     }//GEN-LAST:event_cashInputKeyReleased
 
     private void backBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBTNActionPerformed

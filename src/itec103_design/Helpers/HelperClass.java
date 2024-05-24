@@ -10,6 +10,8 @@ import itec103_design.Model.Category;
 import itec103_design.Model.Order;
 import itec103_design.Model.OrderItem;
 import itec103_design.Model.Product;
+import itec103_design.Model.User;
+import itec103_design.Users;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -29,6 +31,13 @@ import static javax.swing.JOptionPane.showMessageDialog;
 
 public class HelperClass {
     Connection con = DBConnection.connect();
+    
+    public boolean changeFrame(JFrame frame) {
+        frame.setVisible(true);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        return true;
+    }
     public void messageDialog(String message) {
 	showMessageDialog(null, message);
     }
@@ -143,11 +152,11 @@ public class HelperClass {
                 int cash = rs.getInt("cash");
                 String cash_type = rs.getString("cash_type");                
                 String order_type = rs.getString("order_type");
-
+                String total = rs.getString("total");
                 String created_at = rs.getString("created_at");
                 String updated_at = rs.getString("updated_at");
                 int status = rs.getInt("status");
-                Order order = new Order(order_id, reference, user_id, customer_name, cash, cash_type, order_type, created_at, updated_at, status);
+                Order order = new Order(order_id, reference, user_id, customer_name, cash, cash_type, order_type,total, created_at, updated_at, status);
                 orders.add(order);
             }
         } catch (SQLException e) {
@@ -195,6 +204,34 @@ public class HelperClass {
             Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
         }
         return field;
+    }
+    
+    public List<User> getUsers(String query) {
+//        String query = "SELECT * FROM users WHERE status= '0' ORDER BY user_id ASC";
+        List users = new ArrayList<>();
+
+        try{
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                int user_id = rs.getInt("user_id");
+                String lastname = rs.getString("lastname");
+                String firstname = rs.getString("firstname");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String created_at = rs.getString("created_at");
+                String updated_at = rs.getString("updated_at");
+                String role = rs.getString("role");
+                int status = rs.getInt("status");
+                
+                User user = new User(user_id, firstname, lastname, email, password, created_at, updated_at, role, status);
+                users.add(user);
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return users;
     }
     
 }

@@ -62,14 +62,15 @@ public class Orders extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 String options = String.valueOf(searchBy.getSelectedItem());
                 switch(options) {
-                    case "Order Date":
+                    case "Order Date" -> {
                         orderDatepicker.show();
                         search_order.hide();
-                      break;
-                    default:
-                      orderDatepicker.hide();
-                      search_order.setText("");
-                      search_order.show();
+                    }
+                    default -> {
+                        orderDatepicker.hide();
+                        search_order.setText("");
+                        search_order.show();
+                    }
                 }
             }
         });
@@ -128,22 +129,12 @@ public class Orders extends javax.swing.JFrame {
 
             if(!search_order.getText().isBlank()){
                 switch(options) {
-                    case "All":
-    //                    query = "SELECT * FROM orders where reference LIKE'"+srchValue+"%' OR customer_name LIKE'"+srchValue+"%' OR product_id ='"+prod_id+"%' OR updated_at '"+srchValue+"%' ORDER BY updated_at desc";
+                    case "All" -> //                    query = "SELECT * FROM orders where reference LIKE'"+srchValue+"%' OR customer_name LIKE'"+srchValue+"%' OR product_id ='"+prod_id+"%' OR updated_at '"+srchValue+"%' ORDER BY updated_at desc";
                        query = "SELECT * FROM orders where reference LIKE '%"+srchValue+"%' OR customer_name LIKE '%"+srchValue+"%' OR updated_at LIKE '%"+srchValue+"%' ORDER BY updated_at desc";
-
-                        break;
-                    case "Reference":
-                      query = "SELECT * FROM orders where reference LIKE '"+srchValue+"%'";
-                      break;
-                    case "Customer Name":
-                      query = "SELECT * FROM orders where customer_name LIKE '"+srchValue+"%'";
-                      break;
-                    case "Order Date":
-                      query = "SELECT * FROM orders where created_at LIKE '"+srchValue+"%' ORDER BY updated_at desc";
-                      break;
-                    default:
-                      System.out.print("This is blank");
+                    case "Reference" -> query = "SELECT * FROM orders where reference LIKE '"+srchValue+"%'";
+                    case "Customer Name" -> query = "SELECT * FROM orders where customer_name LIKE '"+srchValue+"%'";
+                    case "Order Date" -> query = "SELECT * FROM orders where created_at LIKE '"+srchValue+"%' ORDER BY updated_at desc";
+                    default -> System.out.print("This is blank");
                 }
                 getAllorders(query);
             } else {
@@ -493,44 +484,33 @@ public class Orders extends javax.swing.JFrame {
         int input = hp.confirmDialog("Confirm Log Out?");
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
-            Login LoginFrame = new Login();
-            LoginFrame.setVisible(true);
-            LoginFrame.pack();
-            LoginFrame.setLocationRelativeTo(null);
-            this.dispose();   
+               
+            boolean d = hp.changeFrame(new Login());
+            if(d)this.dispose();
         }
     }//GEN-LAST:event_logoutActionPerformed
 
 
     private void dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardActionPerformed
-        // TODO add your handling code here:
-        Dash Frame = new Dash();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+        
+        boolean d = hp.changeFrame(new Dash());
+        if(d)this.dispose();
     }//GEN-LAST:event_dashboardActionPerformed
 
     private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
         try {
-            // TODO add your handling code here:
-            Categories Frame = new Categories();
-            Frame.setVisible(true);
-            Frame.pack();
-            Frame.setLocationRelativeTo(null);
-            this.dispose();         // TODO add your handling code here:
+            
+            boolean d = hp.changeFrame(new Categories());
+            if(d)this.dispose();
         } catch (SQLException ex) {
             Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_categoriesActionPerformed
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
-        // TODO add your handling code here:
-        Products Frame = new Products();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();   
+
+        boolean d = hp.changeFrame(new Products());
+        if(d)this.dispose();
     }//GEN-LAST:event_productsActionPerformed
 
     private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
@@ -538,21 +518,14 @@ public class Orders extends javax.swing.JFrame {
     }//GEN-LAST:event_purchasedActionPerformed
 
     private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
-        // TODO add your handling code here:
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();
+         
+        boolean d = hp.changeFrame(new Users());
+        if(d)this.dispose();
+        
     }//GEN-LAST:event_usersLinkActionPerformed
 
     private void searchByActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchByActionPerformed
-        //       String cat_id = getCategoryId();
-        //       String prod = search_product.getText();
-        //       String Column = (String) searchBy.getSelectedItem();
-        //       String sql = "Select* from categories WHERE " + searchBy + "LIKE '"+prod+"%'";
-        //
-
+        
     }//GEN-LAST:event_searchByActionPerformed
 
     private void search_orderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_search_orderMouseClicked
@@ -574,11 +547,9 @@ public class Orders extends javax.swing.JFrame {
     }//GEN-LAST:event_search_orderKeyReleased
 
     private void find_productActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_find_productActionPerformed
-        Ordering Frame = new Ordering();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();
+        
+        boolean d = hp.changeFrame(new Ordering());
+        if(d)this.dispose();
     }//GEN-LAST:event_find_productActionPerformed
 
     private void find_product1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_find_product1ActionPerformed
@@ -669,7 +640,7 @@ public class Orders extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dash().setVisible(true);
+                new Orders().setVisible(true);
                 
             }
         });

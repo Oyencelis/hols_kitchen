@@ -479,7 +479,7 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel6">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="- Double click the row to edit item"/>
+                    <Property name="text" type="java.lang.String" value="- Double click the row to delete item"/>
                   </Properties>
                 </Component>
               </SubComponents>

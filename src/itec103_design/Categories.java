@@ -62,8 +62,10 @@ public class Categories extends javax.swing.JFrame {
             usersLink.setVisible(false);
             addCategoryBtn.setVisible(false);
             adLabel.setVisible(true);
+            jLabel7.setVisible(false);
         } else if(number == 1) {
             adLabel.setVisible(false);
+            jLabel7.setVisible(true);
         }
     }
 
@@ -352,22 +354,18 @@ public class Categories extends javax.swing.JFrame {
         int input = hp.confirmDialog("Confirm Log Out?");
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
-            Login LoginFrame = new Login();
-            LoginFrame.setVisible(true);
-            LoginFrame.pack();
-            LoginFrame.setLocationRelativeTo(null);
-            this.dispose();   
+            
+            boolean d = hp.changeFrame(new Login());
+            if(d)this.dispose();
         }
     }//GEN-LAST:event_logoutActionPerformed
 
 
     private void dashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dashboardActionPerformed
         // TODO add your handling code here:
-        Dash Frame = new Dash();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+        
+        boolean d = hp.changeFrame(new Dash());
+        if(d)this.dispose();
     }//GEN-LAST:event_dashboardActionPerformed
 
     private void categoriesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoriesActionPerformed
@@ -376,29 +374,23 @@ public class Categories extends javax.swing.JFrame {
 
     private void productsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_productsActionPerformed
         // TODO add your handling code here:
-        Products Frame = new Products();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();   
+         
+        boolean d = hp.changeFrame(new Products());
+        if(d)this.dispose();
     }//GEN-LAST:event_productsActionPerformed
 
     private void purchasedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedActionPerformed
         // TODO add your handling code here:
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+         
+        boolean d = hp.changeFrame(new Orders());
+        if(d)this.dispose();
     }//GEN-LAST:event_purchasedActionPerformed
 
     private void usersLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersLinkActionPerformed
-        // TODO add your handling code here:
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose();
+        
+        boolean d = hp.changeFrame(new Users());
+        if(d)this.dispose();
+        
     }//GEN-LAST:event_usersLinkActionPerformed
 
     private void category_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_category_nameActionPerformed
@@ -515,7 +507,11 @@ public class Categories extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Dash().setVisible(true);
+                try {
+                    new Categories().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
             }
         });
