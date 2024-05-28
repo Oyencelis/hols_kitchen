@@ -4,14 +4,12 @@
  */
 package itec103_design;
 
-import static com.mysql.cj.conf.PropertyKey.PASSWORD;
 import itec103_design.Connection.DBConnection;
 import itec103_design.Helpers.HelperClass;
 import itec103_design.Model.Category;
 import itec103_design.Model.Product;
 import itec103_design.Model.User;
 import itec103_design.Model.UserManager;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -42,17 +40,13 @@ public class Ordering extends javax.swing.JFrame {
     /**
      * Creates new form JFrame4
      */
+    
     HelperClass hp = null;
     Connection con = null;
     String cus_name = null, 
-           ordrtyp = null,
-           reference_id = null,
-           cash_type = null,
-           date = null;
-//    dou cash_amount = 0, total = 0;
+           reference_id = null;
     double total = 0, cash_amount = 0;
     String[][] orderItem = {};
-    private Object button;
     
     public Ordering() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,9 +120,7 @@ public class Ordering extends javax.swing.JFrame {
         
     }
     private void addOrderItem(String prod_id,String prod_name, String qty, String price) {
-        // Expand the array size by 1
         int quantityToAdd = 1;
-        // Check if the data ID exists and update or add details
         orderItem = updateOrAddAndSumQuantity(orderItem, prod_id, quantityToAdd, prod_name, qty, price);
         getFinalOrder();
         
@@ -190,7 +182,6 @@ public class Ordering extends javax.swing.JFrame {
             }
             data = newData;
         } else {
-            // ID not found, no need to remove
             System.out.println("ID not found.");
         }
 
@@ -625,40 +616,14 @@ public class Ordering extends javax.swing.JFrame {
     }//GEN-LAST:event_cashInputActionPerformed
 
     private void cashInputKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cashInputKeyPressed
-//        String regex = "^\\d*\\.?\\d*$";
-//        String value = cashInput.getText();
-//        if (!value.matches(regex)) {
-//            hp.errorMessageDialog("Enter Number Only");
-//            cashInput.setText("");
-//            if(!cashInput.getText().isEmpty()) {
-//                cashInput.setText("");
-//            }
-//        }
-    }//GEN-LAST:event_cashInputKeyPressed
- 
-    public String getSelectedValue(JRadioButton b1, JRadioButton b2) {
-        AbstractButton selectedButton = getSelectedButton(b1, b2);
-        if (selectedButton != null) {
-            return selectedButton.getText();
-        } else {
-            return null; // Return null if no radio button is selected
-        }
-    }
 
-    public AbstractButton getSelectedButton(AbstractButton... buttons) {
-        for (AbstractButton button : buttons) {
-            if (button.isSelected()) {
-                return button;
-            }
-        }
-        return null;
-    }
+    }//GEN-LAST:event_cashInputKeyPressed
 
     private void placeOrderlogInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_placeOrderlogInBtn
 
         cus_name = customer_name.getText();
-        String orderType = getSelectedValue(dineIn, takeOut);        
-        String cashType = getSelectedValue(mopCash, mopGcash);
+        String orderType = hp.getSelectedValue(dineIn, takeOut);        
+        String cashType = hp.getSelectedValue(mopCash, mopGcash);
 
         String cashVal = cashInput.getText();
         if(orderItem.length == 0) {
@@ -694,11 +659,8 @@ public class Ordering extends javax.swing.JFrame {
         
     }//GEN-LAST:event_placeOrderlogInBtn
     private void changeFrame() {
-        Orders Frame = new Orders();
-        Frame.setVisible(true);
-        Frame.pack();
-        Frame.setLocationRelativeTo(null);
-        this.dispose(); 
+        boolean d = hp.changeFrame(new Orders());
+        if(d)this.dispose();
     }
     public boolean insertOrderItem(String[][] data) {
         // SQL query to insert data

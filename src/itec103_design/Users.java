@@ -5,13 +5,12 @@
 package itec103_design;
 import itec103_design.Connection.DBConnection;
 import itec103_design.Helpers.HelperClass;
-import itec103_design.Model.Category;
 import java.sql.Connection;
 import itec103_design.Model.User;
 import itec103_design.Model.UserManager;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,24 +32,26 @@ public class Users extends javax.swing.JFrame {
     public Users() {
         initComponents();
         setUser();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
         con = DBConnection.connect();
         hp = new HelperClass();
-        getAllUsers("SELECT * FROM users ORDER BY user_id ASC");
+        getAllUsers("SELECT * FROM users ORDER BY user_id DESC");
         this.setLocationRelativeTo(null);
     }
     
     private void setUser(){
         User currentUser = UserManager.getCurrentUser();
-        System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
         if(number == 0) {
             purchased.setVisible(false);
+            categories.setVisible(false);
+            products.setVisible(false);
         }
     }
     
-    private void getAllUsers(String query){
+    public void getAllUsers(String query){
             
             List<User> users = hp.getUsers(query);
             DefaultTableModel model = (DefaultTableModel) userTable.getModel();
@@ -68,6 +69,8 @@ public class Users extends javax.swing.JFrame {
                 model.addRow(new Object[]{user.getUserId(),count, user.getFirstname(), user.getLastname(), role, user.getCreatedAt()});
             }
     }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,7 +171,7 @@ public class Users extends javax.swing.JFrame {
                 categoriesActionPerformed(evt);
             }
         });
-        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
+        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
         products.setBackground(new java.awt.Color(242, 242, 242));
         products.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -186,7 +189,7 @@ public class Users extends javax.swing.JFrame {
                 productsActionPerformed(evt);
             }
         });
-        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
+        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         purchased.setBackground(new java.awt.Color(242, 242, 242));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -204,7 +207,7 @@ public class Users extends javax.swing.JFrame {
                 purchasedActionPerformed(evt);
             }
         });
-        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
 
         usersLink.setBackground(new java.awt.Color(237, 121, 13));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -239,7 +242,7 @@ public class Users extends javax.swing.JFrame {
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
         user.setText("User");
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
+        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 540, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Users");
@@ -294,6 +297,12 @@ public class Users extends javax.swing.JFrame {
         });
         jPanel4.add(find_user, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 90, 70, 30));
 
+        jScrollPane2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane2MouseClicked(evt);
+            }
+        });
+
         userTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -325,7 +334,7 @@ public class Users extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(userTable);
 
-        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 740, 300));
+        jPanel4.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 740, 360));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Search User");
@@ -418,7 +427,7 @@ public class Users extends javax.swing.JFrame {
     }//GEN-LAST:event_search_userActionPerformed
 
     private void search_userKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_userKeyPressed
-    formValidationWithEnter(evt);        
+        formValidationWithEnter(evt);        
     }//GEN-LAST:event_search_userKeyPressed
 
     private void search_userKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_search_userKeyReleased
@@ -457,15 +466,20 @@ public class Users extends javax.swing.JFrame {
     }//GEN-LAST:event_userTableKeyPressed
 
     private void userTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userTableMouseClicked
-        // TODO add your handling code here:
-//        String user = categorylist.getSelectedItem();
-//        System.out.println("Double "+ category);
-//
-//        Statement st = con.createStatement();
-//        String query = "UPDATE categories SET status='1' WHERE category_name = '"+category+"'";
-//        st.execute(query);
-//        getCategories();
+        if (evt.getClickCount() == 1) {
+            int column = 0;
+            int row = userTable.getSelectedRow();
+            String uid = userTable.getModel().getValueAt(row, column).toString();
+            boolean d = hp.changeFrame(new UserDetails(uid));
+            if(d)this.dispose();
+        }
     }//GEN-LAST:event_userTableMouseClicked
+
+    private void jScrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MouseClicked
+        // TODO add your handling code here:
+        
+        
+    }//GEN-LAST:event_jScrollPane2MouseClicked
     
     public void formValidationWithEnter(java.awt.event.KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){

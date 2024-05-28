@@ -14,13 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.security.MessageDigest;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.List;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
@@ -178,7 +172,7 @@ public class Login extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jLabel2.setText("Email / Username");
+        jLabel2.setText("Username");
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jLabel4.setText("Password");
@@ -210,21 +204,20 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(email)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(40, 40, 40)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(email)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(66, 66, 66))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, 0)
                         .addComponent(signuplabel, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(94, 94, 94))))
+                        .addGap(94, 94, 94))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(109, 109, 109))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -268,9 +261,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_emailActionPerformed
     
     public void formValidation(){
-        String 
-                
-                Email, 
+        String  Email, 
                 Password, 
                 query, 
                 passDb = null, 
@@ -279,31 +270,24 @@ public class Login extends javax.swing.JFrame {
                 eml= null,
                 created_at = null,
                 updated_at = null,
-                verifyPass = null,
-                role = null;
-       
-        
-        int notFound = 0;
-        int user_id = 0, status =0;
+                role = null,
+                status = null;
+        int notFound = 0, user_id = 0;
         
         try {
-            Statement st = con.createStatement();
             if(email.getText().isBlank() && password.getText().isBlank()){
                 hp.errorMessageDialog("All field are required");
             }else if(email.getText().isBlank()){
-                hp.errorMessageDialog("Please Enter Email");
+                hp.errorMessageDialog("Please Enter Username");
             }else if(password.getText().isBlank()){
                 hp.errorMessageDialog("Please Enter Password");
             }else {
                 Email = email.getText();
-                Password = passwordHash(password.getText());
-                //String hashedPassword = hashPassword(Password);
+                Password = hp.passwordHash(password.getText());
                 
-                query = "SELECT * FROM users WHERE email= '"+Email+"'";
+                query = "SELECT * FROM users WHERE email= '"+Email+"' AND status = 0";
                 List<User> users = hp.getUsers(query);
-//                ResultSet rs = st.executeQuery(query);
                 if(!users.isEmpty()){
-//ser(int user_id, String firstname, String lastname, String email, String password, String created_at, String updated_at, String role, int status) {
                     for(User user: users) {
                         
                         user_id = user.getUserId();
@@ -316,21 +300,18 @@ public class Login extends javax.swing.JFrame {
                         role = user.getRole();
                         status = user.getStatus();
                         notFound = 1;
-                        System.out.println("Original Password: " + user_id);
-                        System.out.println("Hashed Password: " + passDb);
                     }
                     if(notFound == 1 && Password.equals(passDb)){
                         User currentUser = new User(user_id, firstname, lastname, eml, Password, created_at, updated_at,  role, status);
                         UserManager.setCurrentUser(currentUser);
-                        System.out.println("User: " + currentUser.getPassword());
-                       boolean d = hp.changeFrame(new Dash());
-                       if(d)this.dispose();
+                        boolean d = hp.changeFrame(new Dash());
+                        if(d)this.dispose();
                        
                     }else{
-                        hp.errorMessageDialog("Incorrect Email or Password");
+                        hp.errorMessageDialog("Incorrect Username or Password");
                     }
                 } else {
-                    hp.errorMessageDialog("Incorrect Email or Password");
+                    hp.errorMessageDialog("Incorrect Username or Password");
                 }
                 password.setText("");
 
@@ -371,22 +352,7 @@ public class Login extends javax.swing.JFrame {
         }
     }
     
-    public static String passwordHash(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA");
-            md.update(password.getBytes());
-            byte[] rbt = md.digest();
-            StringBuilder sb = new StringBuilder();
-            
-            for(byte b: rbt) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        }catch(Exception e) {
-            
-        }
-        return null;
-    }
+    
     
     /**
      * @param args the command line arguments

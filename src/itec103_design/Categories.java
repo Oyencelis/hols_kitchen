@@ -54,18 +54,13 @@ public class Categories extends javax.swing.JFrame {
     
     private void setUser(){
         User currentUser = UserManager.getCurrentUser();
-        //System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
         if(number == 0) {
             usersLink.setVisible(false);
-            addCategoryBtn.setVisible(false);
-            adLabel.setVisible(true);
-            jLabel7.setVisible(false);
-        } else if(number == 1) {
-            adLabel.setVisible(false);
-            jLabel7.setVisible(true);
+            categories.setVisible(false);
+            products.setVisible(false);
         }
     }
 
@@ -98,7 +93,6 @@ public class Categories extends javax.swing.JFrame {
         category_name = new javax.swing.JTextField();
         addCategoryBtn = new javax.swing.JButton();
         categorylist = new java.awt.List();
-        adLabel = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -169,7 +163,7 @@ public class Categories extends javax.swing.JFrame {
                 categoriesActionPerformed(evt);
             }
         });
-        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
+        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
         products.setBackground(new java.awt.Color(242, 242, 242));
         products.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -187,7 +181,7 @@ public class Categories extends javax.swing.JFrame {
                 productsActionPerformed(evt);
             }
         });
-        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
+        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         purchased.setBackground(new java.awt.Color(242, 242, 242));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -205,7 +199,7 @@ public class Categories extends javax.swing.JFrame {
                 purchasedActionPerformed(evt);
             }
         });
-        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
 
         usersLink.setBackground(new java.awt.Color(242, 242, 242));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -240,7 +234,7 @@ public class Categories extends javax.swing.JFrame {
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
         user.setText("User");
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
+        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 540, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Categories");
@@ -307,10 +301,6 @@ public class Categories extends javax.swing.JFrame {
             }
         });
         jPanel4.add(categorylist, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 400, 340));
-
-        adLabel.setBackground(new java.awt.Color(255, 255, 255));
-        adLabel.setText("Only Available for Administrator");
-        jPanel4.add(adLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 150, 200, -1));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Category Name");
@@ -426,11 +416,7 @@ public class Categories extends javax.swing.JFrame {
                 Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
-        
-        
-//        int res = hp.confirmDialog("Please enter category");
-//             System.out.println("Original Password: " + res);
-        
+          
         
     }//GEN-LAST:event_addCategoryBtnlogInBtn
 
@@ -451,7 +437,6 @@ public class Categories extends javax.swing.JFrame {
                      if(input == 0) {
                         // Double-click detected
                         String category = categorylist.getSelectedItem();
-                        System.out.println("Double "+ category);
 
                         Statement st = con.createStatement();
                         String query = "UPDATE categories SET status='1' WHERE category_name = '"+category+"'";
@@ -519,7 +504,6 @@ public class Categories extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JLabel adLabel;
     javax.swing.JButton addCategoryBtn;
     javax.swing.JButton categories;
     javax.swing.JTextField category_name;

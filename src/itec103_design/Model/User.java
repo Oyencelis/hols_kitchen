@@ -17,9 +17,9 @@ public class User {
     private String created_at;
     private String updated_at;
     private String role;
-    private int status;
+    private String status;
 
-    public User(int user_id, String firstname, String lastname, String email, String password, String created_at, String updated_at, String role, int status) {
+    public User(int user_id, String firstname, String lastname, String email, String password, String created_at, String updated_at, String role, String status) {
         this.user_id = user_id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -93,11 +93,11 @@ public class User {
         this.role = role;
     }
     
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     

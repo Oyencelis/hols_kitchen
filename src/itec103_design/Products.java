@@ -20,7 +20,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -59,12 +58,13 @@ public class Products extends javax.swing.JFrame {
     }
     private void setUser(){
         User currentUser = UserManager.getCurrentUser();
-        System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
         if(number == 0) {
             usersLink.setVisible(false);
+            categories.setVisible(false);
+            products.setVisible(false);
         } 
     }
     
@@ -217,7 +217,7 @@ public class Products extends javax.swing.JFrame {
                 categoriesActionPerformed(evt);
             }
         });
-        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
+        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
         products.setBackground(new java.awt.Color(237, 121, 13));
         products.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -235,7 +235,7 @@ public class Products extends javax.swing.JFrame {
                 productsActionPerformed(evt);
             }
         });
-        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
+        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         purchased.setBackground(new java.awt.Color(242, 242, 242));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -253,7 +253,7 @@ public class Products extends javax.swing.JFrame {
                 purchasedActionPerformed(evt);
             }
         });
-        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
 
         usersLink.setBackground(new java.awt.Color(242, 242, 242));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -288,7 +288,7 @@ public class Products extends javax.swing.JFrame {
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
         user.setText("User");
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
+        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 540, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Products");
@@ -519,7 +519,6 @@ public class Products extends javax.swing.JFrame {
 
 	// 0=yes, 1=no, 2=cancel
         if(input == 0) {
-               
             boolean d = hp.changeFrame(new Login());
             if(d)this.dispose();
         }
@@ -587,7 +586,6 @@ public class Products extends javax.swing.JFrame {
 
     private void addProductBtnlogInBtn(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductBtnlogInBtn
         String cat_id = getCategoryId();
-//        System.out.println("Original Password: " + cat_id);
         String product = product_name.getText();
         float price_val;
         if (cat_id == null){
@@ -663,15 +661,12 @@ public class Products extends javax.swing.JFrame {
                 case "All" -> query = "SELECT * FROM products where product_name LIKE '%"+srchValue+"%' OR price LIKE '%"+srchValue+"%' OR category_id ='"+cat_id+"'";
                 case "Name" -> {
                     query = "SELECT * FROM products where product_name LIKE'%"+srchValue+"%'";
-                    System.out.print("this is name");
                 }
                 case "Price" -> {
                     query = "SELECT * FROM products where price LIKE'%"+srchValue+"%'";
-                    System.out.print("Ths is price");
                 }
                 case "Category" -> {
                     query = "SELECT * FROM products where category_id ='"+cat_id+"%'";
-                    System.out.print("This is category" + cat_id);
                 }
                 default -> System.out.print("This is blank");
             }
@@ -707,7 +702,6 @@ public class Products extends javax.swing.JFrame {
                     int column = 0;
                     int row = productTable.getSelectedRow();
                     String valueId = productTable.getModel().getValueAt(row, column).toString();
-                    System.out.println("Double "+ valueId);
 
                     Statement st = con.createStatement();
                     String query = "UPDATE products SET status='1' WHERE product_id = '"+valueId+"'";

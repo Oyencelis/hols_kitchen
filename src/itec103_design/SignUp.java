@@ -10,14 +10,8 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.security.MessageDigest;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  *
@@ -188,7 +182,7 @@ public class SignUp extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 96, 140, -1));
 
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jLabel4.setText("Email");
+        jLabel4.setText("Username");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(323, 145, 140, -1));
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -243,25 +237,32 @@ public class SignUp extends javax.swing.JFrame {
                 }else if(lname.getText().isBlank()) {
                     hp.errorMessageDialog("Lastname is required");
                 }else if(email.getText().isBlank()){
-                    hp.errorMessageDialog("Email is required");
+                    hp.errorMessageDialog("Username is required");
                 }else if(password.getText().isBlank()){
                     hp.errorMessageDialog("Password is required");
                 }else {
                     firstname = fname.getText();
                     lastname = lname.getText();                
                     useEmail = email.getText();
-                    usePass = passwordHash(password.getText());
-                    System.out.println(password);
+                    usePass = hp.passwordHash(password.getText());
+                    
+                    String checkEmail = "SELECT email FROM `users` WHERE email= '"+useEmail+"';";
+                    String emailExist = hp.getDetail(checkEmail, "email");
+                    
+                    if(emailExist != null) {
+                        hp.errorMessageDialog("Account is already exist, please try to use different username.");
+                    } else {
+                        query = "INSERT INTO users(firstname, lastname, email, password, status)" +
+                            "VALUES('"+firstname+"','"+lastname+"', '"+useEmail+"', '"+usePass+"', 1)";
 
-                    query = "INSERT INTO users(firstname, lastname, email, password)" +
-                            "VALUES('"+firstname+"','"+lastname+"', '"+useEmail+"', '"+usePass+"')";
+                        st.execute(query);
+                        fname.setText("");
+                        lname.setText("");
+                        email.setText("");
+                        password.setText("");
+                        hp.messageDialog("New Account has been created");
+                    }
 
-                    st.execute(query);
-                    fname.setText("");
-                    lname.setText("");
-                    email.setText("");
-                    password.setText("");
-                    hp.messageDialog("New Account has been created");
 
 
                 }
@@ -292,24 +293,6 @@ public class SignUp extends javax.swing.JFrame {
         formValidationWithEnter(evt);
     }//GEN-LAST:event_passwordKeyPressed
 
-    
-    public static String passwordHash(String password) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA");
-            md.update(password.getBytes());
-            byte[] rbt = md.digest();
-            StringBuilder sb = new StringBuilder();
-            
-            for(byte b: rbt) {
-                sb.append(String.format("%02x", b));
-            }
-            return sb.toString();
-        }catch(Exception e) {
-            
-        }
-        return null;
-    }
-    
     /**
      * @param args the command line arguments
      */

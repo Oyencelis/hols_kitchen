@@ -4,7 +4,6 @@
  */
 package itec103_design;
 
-import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 import itec103_design.Helpers.HelperClass;
 import itec103_design.Model.Order;
@@ -13,7 +12,6 @@ import itec103_design.Model.User;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +20,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,17 +27,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jfree.chart.ChartFactory;
-
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-
-
-import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
-
 /**
  *
  * @author Janice
@@ -51,10 +40,6 @@ public class Dash extends javax.swing.JFrame {
      * Creates new form JFrame4
      */
     HelperClass hp = null;
-    private DefaultPieDataset pieDataset;
-    private JFreeChart pieChart;
-    private PiePlot piePlot;
-    private ChartPanel PieChartPanel;
     LocalDateTime now = LocalDateTime.now();
     
     String dateChoose = null;
@@ -64,19 +49,18 @@ public class Dash extends javax.swing.JFrame {
         hp = new HelperClass();
         this.setLocationRelativeTo(null);
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("../hols.jpg")));
-              
-//        showPieChart(monthlySale, "December 2024"); 
-//        showPieChart(anualSales, "Year 2024");        
-   
+
+
         getEmployeeCount();
         getSumSales();
         getTotalOrder();
         getSumTodaySales();
-        
         onchangeDate();
         
         
     }
+    
+
     private String DateFormatter(String formatFrmDate, String newformat, String date) {
         String returndate = null;
          try {
@@ -114,7 +98,6 @@ public class Dash extends javax.swing.JFrame {
                     String selected = DateFormatter("yyyy-MM-dd","MMM d, yyyy",dateChoose);
                     dateChoose = DateFormatter("yyyy-MM-dd","yyyy-MM-dd",dateChoose);
                     selected_date.setText(selected);
-                    System.out.println("Selected date: " + selected);
                     getMonthlyReport(dateChoose);
                     getYearReport(dateChoose);
                    
@@ -129,17 +112,19 @@ public class Dash extends javax.swing.JFrame {
         all_sales.setText("PHP "+hp.numberFormatter(count));
     }
     private void getSumTodaySales() {
-         // Get today's date and time in the format expected by MySQL (YYYY-MM-DD HH:mm:ss)
-//        LocalDateTime now = LocalDateTime.now();
+        
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String todayDateTime = now.format(formatter);
-        
         String query = "SELECT sum(total) as total_sum FROM `orders` WHERE created_at LIKE '"+todayDateTime+"%';";
         String count = hp.getDetail(query, "total_sum");
-        today_sale.setText("PHP "+hp.numberFormatter(count));
+        if(count != null) {
+            today_sale.setText("PHP "+hp.numberFormatter(count));
+        } else {
+            today_sale.setText("PHP 0.00");
+        }  
     }
     private void getEmployeeCount() {
-        String query = "SELECT count(*) as count FROM `users`";
+        String query = "SELECT count(*) as count FROM `users` WHERE role = 0";
         String count = hp.getDetail(query, "count");
         total_employee.setText(count);
     }
@@ -214,7 +199,7 @@ public class Dash extends javax.swing.JFrame {
 
         // Create a chart panel
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(300, 200));
+        chartPanel.setPreferredSize(new Dimension(300, 300));
 
         panel.add(chartPanel, BorderLayout.CENTER); // Add chart panel to the center of the main panel
 
@@ -258,7 +243,7 @@ public class Dash extends javax.swing.JFrame {
 
         // Create a chart panel
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new Dimension(300, 200));
+        chartPanel.setPreferredSize(new Dimension(350, 250));
 
         panel.add(chartPanel, BorderLayout.CENTER); // Add chart panel to the center of the main panel
 
@@ -277,12 +262,13 @@ public class Dash extends javax.swing.JFrame {
     
     private void setUser(){
         User currentUser = UserManager.getCurrentUser();
-        System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
         if(number == 0) {
-            usersLink.setVisible(false);
+            usersLink.setVisible(false);            
+            categories.setVisible(false);
+            products.setVisible(false);
         }
     }
     /**
@@ -399,7 +385,7 @@ public class Dash extends javax.swing.JFrame {
                 categoriesActionPerformed(evt);
             }
         });
-        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
+        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
         products.setBackground(new java.awt.Color(242, 242, 242));
         products.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -417,7 +403,7 @@ public class Dash extends javax.swing.JFrame {
                 productsActionPerformed(evt);
             }
         });
-        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
+        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         usersLink.setBackground(new java.awt.Color(242, 242, 242));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -452,7 +438,7 @@ public class Dash extends javax.swing.JFrame {
                 purchased1ActionPerformed(evt);
             }
         });
-        jPanel2.add(purchased1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+        jPanel2.add(purchased1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 102, 0));
         jPanel1.setToolTipText("");
@@ -470,7 +456,7 @@ public class Dash extends javax.swing.JFrame {
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
         user.setText("User");
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
+        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 540, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Dashboard");
@@ -640,8 +626,7 @@ public class Dash extends javax.swing.JFrame {
                         .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(97, 97, 97)
-                        .addComponent(selected_date, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(selected_date, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
@@ -687,11 +672,11 @@ public class Dash extends javax.swing.JFrame {
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setText("Monthly Sales Report");
-        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 170, -1));
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 170, -1));
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel19.setText("Annually Sales Report");
-        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 160, -1));
+        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 0, 160, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -711,7 +696,7 @@ public class Dash extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(monthlySale, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(anualSales, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(anualSales, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -725,9 +710,9 @@ public class Dash extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(monthlySale, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(anualSales, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(monthlySale)
+                    .addComponent(anualSales, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

@@ -11,7 +11,8 @@ import itec103_design.Model.Order;
 import itec103_design.Model.OrderItem;
 import itec103_design.Model.Product;
 import itec103_design.Model.User;
-import itec103_design.Users;
+import java.awt.Toolkit;
+import java.security.MessageDigest;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,9 +22,11 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
+import javax.swing.JRadioButton;
 /**
  *
  * @author celis
@@ -58,6 +61,25 @@ public class HelperClass {
         price = formatter.format(amount);
         
         return price;
+    }
+     
+  
+     
+    public String passwordHash(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA");
+            md.update(password.getBytes());
+            byte[] rbt = md.digest();
+            StringBuilder sb = new StringBuilder();
+            
+            for(byte b: rbt) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        }catch(Exception e) {
+            
+        }
+        return null;
     }
     public List<Category> getAllCategories() {
         String query = "SELECT * FROM categories WHERE status= '0' ORDER BY category_name ASC";
@@ -222,8 +244,7 @@ public class HelperClass {
                 String created_at = rs.getString("created_at");
                 String updated_at = rs.getString("updated_at");
                 String role = rs.getString("role");
-                int status = rs.getInt("status");
-                
+                String status = rs.getString("status");
                 User user = new User(user_id, firstname, lastname, email, password, created_at, updated_at, role, status);
                 users.add(user);
             }
@@ -232,6 +253,33 @@ public class HelperClass {
             Logger.getLogger(Categories.class.getName()).log(Level.SEVERE, null, e);
         }
         return users;
+    }
+    
+    
+    public String getSelectedValue(JRadioButton b1, JRadioButton b2) {
+        AbstractButton selectedButton = getSelectedButton(b1, b2);
+        if (selectedButton != null) {
+            return selectedButton.getText();
+        } else {
+            return null; // Return null if no radio button is selected
+        }
+    }
+    
+    public String getSelectedValueOfStatus(JRadioButton b1, JRadioButton b2, JRadioButton b3) {
+        AbstractButton selectedButton = getSelectedButton(b1, b2, b3);
+        if (selectedButton != null) {
+            return selectedButton.getText();
+        } else {
+            return null; // Return null if no radio button is selected
+        }
+    }
+    public AbstractButton getSelectedButton(AbstractButton... buttons) {
+        for (AbstractButton button : buttons) {
+            if (button.isSelected()) {
+                return button;
+            }
+        }
+        return null;
     }
     
 }

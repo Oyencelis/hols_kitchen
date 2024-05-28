@@ -12,7 +12,6 @@ import itec103_design.Model.OrderManager;
 import itec103_design.Model.OrderReference;
 import javax.swing.*;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -89,6 +88,7 @@ public class LoopingOrderItem {
         String cus_name = null, 
                ordrtyp = null,
                reference_id = getReference(),
+               processed = null,
                cash_type = null,
                date = null;
         int cash = 0;
@@ -99,7 +99,8 @@ public class LoopingOrderItem {
             ordrtyp = order.getOrderType();
             cash = order.getCash();
             cash_type = order.getCashType();
-            
+            String query = "SELECT CONCAT_WS(' ', `firstname`, `lastname`) AS `fullname` FROM `users` WHERE user_id ='"+order.getUserId()+"'";
+            processed = hp.getDetail(query, "fullname");
             // Test the function
             String dateTimeString = order.getCreatedAt();
             String formattedDate = parseAndFormatDate(dateTimeString);
@@ -136,7 +137,7 @@ public class LoopingOrderItem {
         receiptPanel.setBorder(br);
 
         // Create a panel to hold store name and phone number labels
-        JPanel headerPanel = new JPanel(new GridLayout(4,0, 0, -5));
+        JPanel headerPanel = new JPanel(new GridLayout(5,0, 0, -5));
 //        headerPanel.setBackground(Color.red);
         
         // Add store name
@@ -165,7 +166,16 @@ public class LoopingOrderItem {
         JLabel order = new JLabel( order_type);
         order.setFont(h3);
         headerPanel.add(order);
+        
+        
+        //Add order type
+        String fullname = processed;
+        JLabel full = new JLabel("Processed By: " +fullname);
+        order.setFont(h3);
+        headerPanel.add(full);
          
+        
+
         receiptPanel.add(headerPanel);
         
         

@@ -5,14 +5,12 @@
 package itec103_design;
 
 import Components.LoopingOrderItem;
-//import Components.OrderDetails;
 import itec103_design.Helpers.HelperClass;
 import itec103_design.Model.UserManager;
 import itec103_design.Model.User;
 import itec103_design.Model.Order;
 import itec103_design.Model.OrderManager;
 import itec103_design.Model.OrderReference;
-import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,9 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,11 +49,6 @@ public class Orders extends javax.swing.JFrame {
         
         
         orderDatepicker.hide();
-//        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        Date newDate = new Date();
-//        System.out.println(dateFormat.format(newDate));
-//bill_date.setDateFormatString("yyyy-MM-dd");
-
         searchBy.addActionListener (new ActionListener () {
             public void actionPerformed(ActionEvent e) {
                 String options = String.valueOf(searchBy.getSelectedItem());
@@ -81,7 +72,6 @@ public class Orders extends javax.swing.JFrame {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("date".equals(evt.getPropertyName())) {
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    System.out.println("Selected date: " + format.format(orderDatepicker.getDate()));
                     search_order.setText(format.format(orderDatepicker.getDate()));
                 }
             }
@@ -90,13 +80,13 @@ public class Orders extends javax.swing.JFrame {
     
     private void setUser(){ 
         User currentUser = UserManager.getCurrentUser();
-        System.out.println("User: " + currentUser.getFirstname());
         user.setText(currentUser.getFirstname() + ' ' + currentUser.getLastname());
         String role = currentUser.getRole();
         int number = Integer.parseInt(role);
         if(number == 0) {
             usersLink.setVisible(false);
-            
+            categories.setVisible(false);
+            products.setVisible(false);
         }
     }
     
@@ -117,7 +107,10 @@ public class Orders extends javax.swing.JFrame {
         for (Order order : data) {
             int ref = order.getReference();
             String cus_name = order.getCustomerName();
-            model.addRow(new Object[]{ref, cus_name, order.getCreatedAt()});
+            String query2 = "SELECT CONCAT_WS(' ', `firstname`, `lastname`) AS `fullname` FROM `users` WHERE user_id ='"+order.getUserId()+"'";
+            String fullname = hp.getDetail(query2, "fullname");
+//            ;
+            model.addRow(new Object[]{ref, cus_name, order.getCreatedAt(), fullname});
         }
     }
     
@@ -245,7 +238,7 @@ public class Orders extends javax.swing.JFrame {
                 categoriesActionPerformed(evt);
             }
         });
-        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
+        jPanel2.add(categories, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
 
         products.setBackground(new java.awt.Color(242, 242, 242));
         products.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -263,7 +256,7 @@ public class Orders extends javax.swing.JFrame {
                 productsActionPerformed(evt);
             }
         });
-        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 180, 40));
+        jPanel2.add(products, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
 
         purchased.setBackground(new java.awt.Color(237, 121, 13));
         purchased.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -281,7 +274,7 @@ public class Orders extends javax.swing.JFrame {
                 purchasedActionPerformed(evt);
             }
         });
-        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 180, 40));
+        jPanel2.add(purchased, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 180, 40));
 
         usersLink.setBackground(new java.awt.Color(242, 242, 242));
         usersLink.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -316,7 +309,7 @@ public class Orders extends javax.swing.JFrame {
         user.setIcon(new javax.swing.ImageIcon(getClass().getResource("/user.png"))); // NOI18N
         user.setText("User");
         user.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 10, 130, 40));
+        jPanel3.add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 10, 540, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Orders");
@@ -401,7 +394,7 @@ public class Orders extends javax.swing.JFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "Reference", "Customer Name", "Order Date"
+                "Reference", "Customer Name", "Order Date","Processed By"
             }
         ) {
             Class[] types = new Class [] {
@@ -564,19 +557,11 @@ public class Orders extends javax.swing.JFrame {
             int column = 0;
             int row = orderTable.getSelectedRow();
             String reference = orderTable.getModel().getValueAt(row, column).toString();
-            System.out.println("Double "+ reference);
             OrderReference currentRef = new OrderReference(reference);
             OrderManager.setCurrentOrderRef(currentRef);
             
             
             LoopingOrderItem.main(null);
-            
-            
-            
-            
-            
-//            orders.add(order);
-            
             
         }
     }//GEN-LAST:event_orderTableMouseClicked
@@ -600,7 +585,6 @@ public class Orders extends javax.swing.JFrame {
     public void findOrdersWithEnter(java.awt.event.KeyEvent evt) {
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             findOrders();
-            System.out.print("yeyey");
         }
     }
     /**
@@ -675,15 +659,4 @@ public class Orders extends javax.swing.JFrame {
     javax.swing.JButton usersLink;
     // End of variables declaration//GEN-END:variables
 
-    private String getPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private int getReference() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private String getCustomerName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
